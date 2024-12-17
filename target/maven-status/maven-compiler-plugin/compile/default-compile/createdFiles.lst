@@ -1,0 +1,4 @@
+com/medbemwebservice/medbemwebservice_integration/entities/MonitorizacaoPressaoArterial.class
+com/medbemwebservice/medbemwebservice_integration/jobs/Task.class
+com/medbemwebservice/medbemwebservice_integration/util/HibernateUtil.class
+com/medbemwebservice/medbemwebservice_integration/MedbemApplication.class
