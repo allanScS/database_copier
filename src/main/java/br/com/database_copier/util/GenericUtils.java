@@ -1,11 +1,16 @@
 package br.com.database_copier.util;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import br.com.neoapp.base.AbstractConverter;
 
 public class GenericUtils {
 
@@ -89,6 +94,51 @@ public class GenericUtils {
 		else
 			return localTime;
 //			return localTime.minusHours(3);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> void executePage(final String[] fields, final String sourceTable, final String targetTable,
+			final Integer itensPerPage, final Integer page, final Integer totalPages, final Session source,
+			final Class<T> entityType)
+			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+
+		System.out.printf("BUSCANDO A PAGINA: %d/%d%n", page + 1, totalPages);
+
+		final Session target = HibernateUtil.startSessionFactoryTargetDatabase().openSession();
+
+		final Transaction targetTransaction = target.beginTransaction();
+
+		final String query = GenericUtils.buildSql(fields, sourceTable, GenericUtils.SOURCE_SCHEMA, itensPerPage, page);
+
+		final List<Object[]> list = source.createSQLQuery(query).list();
+
+		final AbstractConverter<T> converter = new AbstractConverter<T>().convertjsonToEntityList(entityType,
+				GenericUtils.objectsToJson(list, fields));
+
+		final List<T> entityList = converter.getEntities();
+
+		for (T entity : entityList) {
+
+			final Field idField = entityType.getDeclaredField("id");
+			idField.setAccessible(true);
+
+			final Object idValue = idField.get(entity);
+
+			final String result = (String) target
+					.createSQLQuery(
+							"SELECT id FROM " + GenericUtils.TARGET_SCHEMA + "." + targetTable + " WHERE id = :id")
+					.setParameter("id", idValue).uniqueResult();
+
+			if (result == null) {
+				synchronized (target) {
+					target.save(entity);
+				}
+			}
+		}
+
+		if (!targetTransaction.wasCommitted()) {
+			targetTransaction.commit();
+		}
 	}
 
 }

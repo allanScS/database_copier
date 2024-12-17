@@ -1,92 +1,61 @@
 package br.com.database_copier.jobs;
 
-import java.util.List;
+import java.math.BigInteger;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.hibernate.Session;
 
 import br.com.database_copier.entities.Account;
 import br.com.database_copier.util.GenericUtils;
-import br.com.database_copier.util.HibernateUtil;
-import br.com.neoapp.base.AbstractConverter;
 
 public class AccountJob {
 
-	@SuppressWarnings("unchecked")
-	public static void execute(Integer itensPerPage) {
+	public static void execute(final Integer itensPerPage, final Integer poolLimit, final Session source) {
 
-		System.out.println("Montando query");
+		final ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(poolLimit);
 
-		final String table = "account";
+		final String sourceTable = "account";
+		final String targetTable = "account";
 
 		final String[] fields = { "id", "created_at", "created_by", "deleted", "deleted_at", "deleted_by", "updated_at",
 				"updated_by", "active", "email", "image_url", "name", "password", "role", "phone", "two_factors_type" };
 
-		Boolean hasMoreElements = Boolean.TRUE;
+		final BigInteger totalElements = (BigInteger) source
+				.createSQLQuery(
+						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
+				.uniqueResult();
 
+		int totalPages = (totalElements.intValue() + itensPerPage - 1) / itensPerPage;
 		int page = 0;
 
-		while (hasMoreElements) {
+		while (page + 1 <= totalPages) {
 
-			System.out.println("BUSCANDO A PAGINA: " + page);
+			final int page2 = page;
 
-			final String query = GenericUtils.buildSql(fields, table, GenericUtils.SOURCE_SCHEMA, itensPerPage, page);
+			threadPool.execute(() -> {
 
-			System.out.println("Iniciando seção com origem");
-
-			Session session = HibernateUtil.startSessionFactorySourceDatabase().getCurrentSession();
-			session.beginTransaction();
-			System.out.println("Seção iniciada com origem");
-
-			final List<Object[]> list = session.createSQLQuery(query).list();
-
-			if (list.isEmpty()) {
-				hasMoreElements = Boolean.FALSE;
-				break;
-			}
-
-			final AbstractConverter<Account> converter = new AbstractConverter<Account>()
-					.convertjsonToEntityList(Account.class, GenericUtils.objectsToJson(list, fields));
-
-			List<Account> entityList = converter.getEntities();
-
-			System.out.println("Lista de dados criada");
-
-			session.close();
-			System.out.println("Transaction commited and Session closed");
-
-			Session insertSession = HibernateUtil.startSessionFactoryTargetDatabase().getCurrentSession();
-			insertSession.beginTransaction();
-			System.out.println("First database transaction started");
-			int i = 0;
-
-			for (i = 0; i < entityList.size(); i++) {
-
-				final Account entity = entityList.get(i);
-
-				if (i % 3000 == 0) {
-					insertSession.getTransaction().commit();
-					insertSession = HibernateUtil.startSessionFactoryTargetDatabase().getCurrentSession();
-					insertSession.beginTransaction();
+				try {
+					GenericUtils.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
+							Account.class);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 
-				final String result = (String) insertSession
-						.createSQLQuery(
-								"SELECT id FROM " + GenericUtils.TARGET_SCHEMA + "." + table + " WHERE id = :id")
-						.setParameter("id", entity.getId()).uniqueResult();
+			});
 
-				if (result == null) {
-					insertSession.save(entity);
-					System.out.println("Inserted MAP: " + entity.getId() + " : " + table);
-				}
-			}
-
-			if (!insertSession.getTransaction().wasCommitted()) {
-				insertSession.getTransaction().commit();
-			}
-
-			System.out.println("Transaction commited and Session closed");
-			System.out.println(i + " new data inserted");
 			page++;
 		}
+
+		threadPool.shutdown();
+
+		try {
+			threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException e) {
+			System.out.println("ERRO :" + e.getMessage());
+		}
+
 	}
+
 }

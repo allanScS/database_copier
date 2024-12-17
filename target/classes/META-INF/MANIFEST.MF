@@ -12,7 +12,6 @@ Class-Path: lib/lombok-1.18.24.jar lib/hibernate-core-4.3.5.Final.jar li
  f4j-simple-1.7.5.jar lib/postgresql-42.3.3.jar lib/checker-qual-3.5.0.j
  ar lib/mssql-jdbc-12.8.1.jre11.jar lib/commons-beanutils-1.9.4.jar lib/
  commons-logging-1.2.jar lib/commons-collections-3.2.2.jar
-Main-Class: com.medbemwebservice.medbemwebservice_integration.MedbemAppl
- ication
+Main-Class: br.com.database_copier.DatabaseCopierApplication
 Created-By: Maven Integration for Eclipse
 

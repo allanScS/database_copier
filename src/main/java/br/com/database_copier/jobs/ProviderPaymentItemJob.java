@@ -1,22 +1,20 @@
 package br.com.database_copier.jobs;
 
-import java.util.List;
+import java.math.BigInteger;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.hibernate.Session;
 
-import br.com.database_copier.entities.PatientCaseForwardingAttendance;
-import br.com.database_copier.entities.ProviderPayment;
 import br.com.database_copier.entities.ProviderPaymentItem;
 import br.com.database_copier.util.GenericUtils;
-import br.com.database_copier.util.HibernateUtil;
-import br.com.neoapp.base.AbstractConverter;
 
 public class ProviderPaymentItemJob {
 
-	@SuppressWarnings("unchecked")
-	public static void execute(Integer itensPerPage) {
+	public static void execute(final Integer itensPerPage, final Integer poolLimit, final Session source) {
 
-		System.out.println("Montando query");
+		final ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(poolLimit);
 
 		final String sourceTable = "provider_payment_item";
 		final String targetTable = "providerPaymentItem";
@@ -24,83 +22,40 @@ public class ProviderPaymentItemJob {
 		final String[] fields = { "id", "created_at", "created_by", "deleted", "deleted_at", "deleted_by", "updated_at",
 				"updated_by", "value", "patient_case_forwarding_attendance_id", "provider_payment_id" };
 
-		Boolean hasMoreElements = Boolean.TRUE;
+		final BigInteger totalElements = (BigInteger) source
+				.createSQLQuery(
+						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
+				.uniqueResult();
 
+		int totalPages = (totalElements.intValue() + itensPerPage - 1) / itensPerPage;
 		int page = 0;
 
-		while (hasMoreElements) {
+		while (page + 1 <= totalPages) {
 
-			System.out.println("BUSCANDO A PAGINA: " + page);
+			final int page2 = page;
 
-			final String query = GenericUtils.buildSql(fields, sourceTable, GenericUtils.SOURCE_SCHEMA, itensPerPage,
-					page);
+			threadPool.execute(() -> {
 
-			System.out.println("Iniciando seção com origem");
-
-			Session session = HibernateUtil.startSessionFactorySourceDatabase().getCurrentSession();
-			session.beginTransaction();
-			System.out.println("Seção iniciada com origem");
-
-			final List<Object[]> list = session.createSQLQuery(query).list();
-
-			if (list.isEmpty()) {
-				hasMoreElements = Boolean.FALSE;
-				break;
-			}
-
-			final AbstractConverter<ProviderPaymentItem> converter = new AbstractConverter<ProviderPaymentItem>()
-					.convertjsonToEntityList(ProviderPaymentItem.class, GenericUtils.objectsToJson(list, fields));
-
-			final List<ProviderPaymentItem> entityList = converter.getEntities();
-
-			System.out.println("Lista de dados criada");
-
-			session.close();
-			System.out.println("Transaction commited and Session closed");
-
-			Session insertSession = HibernateUtil.startSessionFactoryTargetDatabase().getCurrentSession();
-			insertSession.beginTransaction();
-			System.out.println("First database transaction started");
-			int i = 0;
-
-			for (i = 0; i < entityList.size(); i++) {
-
-				final ProviderPaymentItem entity = entityList.get(i);
-
-				if (entity.getProviderPaymentId() != null) {
-					entity.setProviderPayment(new ProviderPayment());
-					entity.getProviderPayment().setId(entity.getProviderPaymentId());
+				try {
+					GenericUtils.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
+							ProviderPaymentItem.class);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 
-				if (entity.getPatientCaseForwardingAttendanceId() != null) {
-					entity.setPatientCaseForwardingAttendance(new PatientCaseForwardingAttendance());
-					entity.getPatientCaseForwardingAttendance().setId(entity.getPatientCaseForwardingAttendanceId());
-				}
+			});
 
-				if (i % 3000 == 0) {
-					insertSession.getTransaction().commit();
-					insertSession = HibernateUtil.startSessionFactoryTargetDatabase().getCurrentSession();
-					insertSession.beginTransaction();
-				}
-
-				final String result = (String) insertSession
-						.createSQLQuery(
-								"SELECT id FROM " + GenericUtils.TARGET_SCHEMA + "." + targetTable + " WHERE id = :id")
-						.setParameter("id", entity.getId()).uniqueResult();
-
-				if (result == null) {
-					insertSession.save(entity);
-					System.out.println("Inserted MAP: " + entity.getId() + " : " + targetTable);
-				}
-			}
-
-			if (!insertSession.getTransaction().wasCommitted()) {
-				insertSession.getTransaction().commit();
-			}
-
-			System.out.println("Transaction commited and Session closed");
-			System.out.println(i + " new data inserted");
 			page++;
 		}
+
+		threadPool.shutdown();
+
+		try {
+			threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException e) {
+			System.out.println("ERRO :" + e.getMessage());
+		}
+
 	}
+
 }

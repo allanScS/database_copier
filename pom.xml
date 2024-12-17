@@ -81,7 +81,7 @@
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
 							<mainClass>
-								com.medbemwebservice.medbemwebservice_integration.MedbemApplication</mainClass>
+								br.com.database_copier.DatabaseCopierApplication</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
