@@ -163,80 +163,20 @@ public class HibernateUtil {
 			configuration.addAnnotatedClass(TroubleArea.class);
 			configuration.addAnnotatedClass(TroubleSubtype.class);
 			configuration.addAnnotatedClass(TroubleType.class);
-
-//			<mapping class="br.com.database_copier.entities.Account" />
-//			<mapping class="br.com.database_copier.entities.AccountCode" />
-//			<mapping class="br.com.database_copier.entities.BankData" />
-//			<mapping class="br.com.database_copier.entities.BenefitsApplicationForm" />
-//			<mapping
-//				class="br.com.database_copier.entities.BenefitsApplicationFormQuestionsAndAnswers" />
-//			<mapping class="br.com.database_copier.entities.Branch" />
-//			<mapping class="br.com.database_copier.entities.Category" />
-//			<mapping class="br.com.database_copier.entities.Client" />
-//			<mapping class="br.com.database_copier.entities.ClientAddress" />
-//			<mapping class="br.com.database_copier.entities.ClientEmail" />
-//			<mapping class="br.com.database_copier.entities.ClientPhone" />
-//			<mapping class="br.com.database_copier.entities.Company" />
-//			<mapping
-//				class="br.com.database_copier.entities.CompanyAdditionalBenefit" />
-//			<mapping class="br.com.database_copier.entities.CompanyAddress" />
-//			<mapping class="br.com.database_copier.entities.CompanyAttachment" />
-//			<mapping class="br.com.database_copier.entities.CompanyElegiblePatient" />
-//			<mapping class="br.com.database_copier.entities.CompanyEmail" />
-//			<mapping class="br.com.database_copier.entities.CompanyHealthPlan" />
-//			<mapping class="br.com.database_copier.entities.CompanyManager" />
-//			<mapping class="br.com.database_copier.entities.CompanyManagerEmail" />
-//			<mapping class="br.com.database_copier.entities.CompanyManagerPhone" />
-//			<mapping class="br.com.database_copier.entities.CompanyPhone" />
-//			<mapping class="br.com.database_copier.entities.CompanyProduct" />
-//			<mapping class="br.com.database_copier.entities.CostCenter" />
-//			<mapping class="br.com.database_copier.entities.CustomerSurvey" />
-//			<mapping class="br.com.database_copier.entities.Event" />
-//			<mapping class="br.com.database_copier.entities.Expense" />
-//			<mapping class="br.com.database_copier.entities.Level" />
-//			<mapping class="br.com.database_copier.entities.Occupation" />
-//			<mapping class="br.com.database_copier.entities.Patient" />
-//			<mapping class="br.com.database_copier.entities.PatientAddress" />
-//			<mapping class="br.com.database_copier.entities.PatientAttachment" />
-//			<mapping class="br.com.database_copier.entities.PatientCase" />
-//			<mapping class="br.com.database_copier.entities.PatientCaseAttachment" />
-//			<mapping class="br.com.database_copier.entities.PatientCaseEvolution" />
-//			<mapping class="br.com.database_copier.entities.PatientCaseForwarding" />
-//			<mapping
-//				class="br.com.database_copier.entities.PatientCaseForwardingAttendance" />
-//			<mapping class="br.com.database_copier.entities.PatientCompany" />
-//			<mapping class="br.com.database_copier.entities.PatientEmail" />
-//			<mapping class="br.com.database_copier.entities.PatientFamilyGroup" />
-//			<mapping class="br.com.database_copier.entities.PatientImportNaturaData" />
-//			<mapping class="br.com.database_copier.entities.PatientPhone" />
-//			<mapping class="br.com.database_copier.entities.Provider" />
-//			<mapping
-//				class="br.com.database_copier.entities.ProviderAdditionalCourse" />
-//			<mapping class="br.com.database_copier.entities.ProviderAddress" />
-//			<mapping class="br.com.database_copier.entities.ProviderAttachment" />
-//			<mapping class="br.com.database_copier.entities.ProviderEmail" />
-//			<mapping class="br.com.database_copier.entities.ProviderFormation" />
-//			<mapping class="br.com.database_copier.entities.ProviderHealthPlan" />
-//			<mapping class="br.com.database_copier.entities.ProviderLanguage" />
-//			<mapping class="br.com.database_copier.entities.ProviderPayment" />
-//			<mapping class="br.com.database_copier.entities.ProviderPaymentItem" />
-//			<mapping class="br.com.database_copier.entities.ProviderPhone" />
-//			<mapping class="br.com.database_copier.entities.ProviderServiceModel" />
-//			<mapping
-//				class="br.com.database_copier.entities.ProviderServiceModelAvailability" />
-//			<mapping class="br.com.database_copier.entities.QuestionsAndAnswers" />
-//			<mapping class="br.com.database_copier.entities.Revenue" />
-//			<mapping class="br.com.database_copier.entities.Schedule" />
-//			<mapping class="br.com.database_copier.entities.SessionReview" />
-//			<mapping class="br.com.database_copier.entities.SpreadsheetImport" />
-//			<mapping class="br.com.database_copier.entities.Subarea" />
-//			<mapping class="br.com.database_copier.entities.Supplier" />
-//			<mapping class="br.com.database_copier.entities.SupplierAddress" />
-//			<mapping class="br.com.database_copier.entities.SupplierEmail" />
-//			<mapping class="br.com.database_copier.entities.SupplierPhone" />
-//			<mapping class="br.com.database_copier.entities.TroubleArea" />
-//			<mapping class="br.com.database_copier.entities.TroubleSubtype" />
-//			<mapping class="br.com.database_copier.entities.TroubleType" />
+			
+			configuration.setProperty("hibernate.c3p0.min_size", "5");
+			configuration.setProperty("hibernate.c3p0.max_size", "200"); // Defina o número máximo de conexões
+			configuration.setProperty("hibernate.c3p0.timeout", "3000"); // Timeout para inatividade de 300 segundos (5 minutos)
+			configuration.setProperty("hibernate.c3p0.max_statements", "500");
+			configuration.setProperty("hibernate.c3p0.idle_test_period", "300");
+			configuration.setProperty("hibernate.c3p0.acquire_increment", "5"); // Quantas conexões o pool irá adquirir de uma vez
+			configuration.setProperty("hibernate.c3p0.max_idle_time", "600"); // Tempo máximo de inatividade antes de desconectar a conexão
+			
+			configuration.setProperty("hibernate.hikari.minimumIdle", "5");  // Mínimo de conexões inativas
+			configuration.setProperty("hibernate.hikari.maximumPoolSize", "200");  // Máximo de conexões no pool
+			configuration.setProperty("hibernate.hikari.idleTimeout", "300000"); // Tempo limite para conexões ociosas (em milissegundos)
+			configuration.setProperty("hibernate.hikari.connectionTimeout", "30000"); // Timeout para tentar uma nova conexão
+			configuration.setProperty("hibernate.hikari.maxLifetime", "600000");  // Máxima duração de uma conexão no pool (em milissegundos)
 
 			final ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 					.applySettings(configuration.getProperties()).build();

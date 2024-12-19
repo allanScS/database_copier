@@ -121,46 +121,55 @@ public class GenericUtils {
 
 	public static <T> void executePage(final String[] fields, final String sourceTable, final String targetTable,
 			final Integer itensPerPage, final Integer page, final Integer totalPages, final Session source,
-			final Class<T> entityType)
-			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+			final Class<T> entityType) {
 
-		System.out.printf("BUSCANDO A PAGINA: %d/%d%n", page + 1, totalPages);
+		boolean success = false;
 
-		final Session target = HibernateUtil.startSessionFactoryTargetDatabase().openSession();
+		while (!success) {
+			try {
+				System.out.printf("BUSCANDO A PAGINA: %d/%d%n", page + 1, totalPages);
 
-		final Transaction targetTransaction = target.beginTransaction();
+				try (Session target = HibernateUtil.startSessionFactoryTargetDatabase().openSession()) {
+					final Transaction targetTransaction = target.beginTransaction();
 
-		final String query = GenericUtils.buildSql(fields, sourceTable, GenericUtils.SOURCE_SCHEMA, itensPerPage, page);
+					final String query = GenericUtils.buildSql(fields, sourceTable, GenericUtils.SOURCE_SCHEMA,
+							itensPerPage, page);
 
-		final ScrollableResults results = source.createNativeQuery(query).setTimeout(600000)
-				.scroll(ScrollMode.FORWARD_ONLY);
+					try (ScrollableResults results = source.createNativeQuery(query).setTimeout(600000)
+							.setFetchSize(itensPerPage).scroll(ScrollMode.FORWARD_ONLY)) {
 
-		while (results.next()) {
+						int count = 0;
+						while (results.next()) {
 
-			final T entity = new AbstractConverter<T>().convertJsonToEntity(entityType,
-					GenericUtils.objectToJson(results.get(), fields));
+							final T entity = new AbstractConverter<T>().convertJsonToEntity(entityType,
+									GenericUtils.objectToJson(results.get(), fields));
 
-			setDependencies(entity, entityType);
+							setDependencies(entity, entityType);
 
-			final Field idField = entityType.getDeclaredField("id");
-			idField.setAccessible(true);
+							target.save(entity);
 
-			final Object idValue = idField.get(entity);
+							if (++count % 50 == 0) {
+								target.flush();
+								target.clear();
+							}
+						}
+					}
 
-			final String result = (String) target
-					.createNativeQuery(
-							"SELECT id FROM " + GenericUtils.TARGET_SCHEMA + "." + targetTable + " WHERE id = :id")
-					.setParameter("id", idValue).uniqueResult();
+					targetTransaction.commit();
+				}
 
-			if (result == null) {
-				synchronized (target) {
-					target.save(entity);
+				success = true;
+
+			} catch (Exception e) {
+				System.err.println("Erro ao processar a página: " + (page + 1));
+
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException interruptedException) {
+					Thread.currentThread().interrupt();
 				}
 			}
 		}
-
-		targetTransaction.commit();
-
 	}
 
 	public static <T> void setDependencies(T entity, final Class<T> entityType) {

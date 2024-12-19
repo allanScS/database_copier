@@ -79,8 +79,8 @@ public class DatabaseCopierApplication {
 
 	public static void main(String[] args) {
 
-		int itensPerPage = 10000;
-		int poolLimit = 10;
+		int itensPerPage = 5000;
+		int poolLimit = 80;
 
 		final LocalDateTime start = LocalDateTime.now();
 

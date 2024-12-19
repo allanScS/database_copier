@@ -58,6 +58,9 @@ public class PatientCompany {
 	private RelationshipEnum relationship;
 
 	private String registrationNumber;
+	
+	@Column(updatable = false)
+	private String importCode;
 
 	@Convert(converter = LocalDateConverter.class)
 	@Column(columnDefinition = ("DATE"))

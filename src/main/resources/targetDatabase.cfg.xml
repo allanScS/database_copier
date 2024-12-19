@@ -7,11 +7,11 @@
 		<property name="hibernate.connection.driver_class">
 			com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
 		<property name="hibernate.connection.url">
-			jdbc:sqlserver://dev16sql.carelink.com.br:14331;databaseName=CarelinkEAP;encrypt=true;trustServerCertificate=true</property>
+			jdbc:sqlserver://dev16sql.carelink.com.br:14331;databaseName=CarelinkEAPProducao;encrypt=true;trustServerCertificate=true</property>
 		<property name="hibernate.connection.username">neoapp</property>
 		<property name="hibernate.connection.password">@!Neo8445App=</property>
 
-		<property name="connection_pool_size">1</property>
+		<property name="connection_pool_size">150</property>
 
 		<property name="hibernate.current_session_context_class">thread</property>
 		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
@@ -22,6 +22,6 @@
 		<property name="hibernate.format_sql">false</property>
 		<property name="hibernate.use_sql_comments">false</property>
 		<property name="hibernate.generate_statistics">false</property>
-		
+
 	</session-factory>
 </hibernate-configuration>
