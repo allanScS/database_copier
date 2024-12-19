@@ -127,7 +127,7 @@ public class GenericUtils {
 
 		while (!success) {
 			try {
-				System.out.printf("BUSCANDO A PAGINA: %d/%d%n", page + 1, totalPages);
+				System.out.printf("BUSCANDO %s PAGINA: %d/%d%n", entityType.getSimpleName(), page + 1, totalPages);
 
 				try (Session target = HibernateUtil.startSessionFactoryTargetDatabase().openSession()) {
 					final Transaction targetTransaction = target.beginTransaction();

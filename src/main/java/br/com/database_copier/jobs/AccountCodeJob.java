@@ -35,14 +35,12 @@ public class AccountCodeJob {
 			final int page2 = page;
 
 			threadPool.execute(() -> {
-
 				try {
-					GenericUtils.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
-							AccountCode.class);
+					GenericUtils.executePage(fields.clone(), sourceTable, targetTable, itensPerPage, page2, totalPages,
+							source, AccountCode.class);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
 			});
 
 			page++;
