@@ -1,5 +1,6 @@
 package br.com.database_copier.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -12,10 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
-import br.com.database_copier.enums.CodeStatus;
+import br.com.database_copier.enums.Kinship;
 import br.com.database_copier.util.GenericUtils;
 import br.com.neoapp.base.BaseEntity;
 import lombok.Data;
@@ -24,13 +24,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@DynamicUpdate
-@Table(name = "account_code", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "card", schema = GenericUtils.SOURCE_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
-public class AccountCode extends BaseEntity<String> {
+public class Card extends BaseEntity<String> {
 
-	private static final long serialVersionUID = -981480765939021268L;
+	private static final long serialVersionUID = 3756971185296154365L;
 
 	@Id
 	@GeneratedValue(generator = "uuid")
@@ -40,16 +39,22 @@ public class AccountCode extends BaseEntity<String> {
 	@ManyToOne
 	private Account account;
 
-	private String code;
+	private String exhibitionName;
 
-	private int attempts;
+	private LocalDate exhibitionBirthdate;
+
+	private String registration;
 
 	@Enumerated(EnumType.STRING)
-	private CodeStatus status;
+	private Kinship kinship;
 
-	private LocalDateTime lastAttemptAt;
+	private String insurance;
 
-	@Transient
+	@ManyToOne
+	private Company company;
+
+	private String healthPlan;
+
 	private Boolean active;
 
 	@Column(updatable = false)

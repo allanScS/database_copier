@@ -10,47 +10,58 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
-import br.com.database_copier.enums.CodeStatus;
+import br.com.database_copier.enums.DataIntegrationReferenceType;
+import br.com.database_copier.enums.DataIntegrationStatus;
 import br.com.database_copier.util.GenericUtils;
 import br.com.neoapp.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author allan scherrer
+ */
 @Data
 @Entity
-@DynamicUpdate
-@Table(name = "account_code", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "data_integration", schema = GenericUtils.SOURCE_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
-public class AccountCode extends BaseEntity<String> {
+public class DataIntegration extends BaseEntity<String> {
 
-	private static final long serialVersionUID = -981480765939021268L;
+	private static final long serialVersionUID = 6101910776879001187L;
 
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
-	@ManyToOne
-	private Account account;
+	@Enumerated(EnumType.STRING)
+	private DataIntegrationStatus status;
 
-	private String code;
+	@Column(columnDefinition = "TEXT")
+	private String message;
 
-	private int attempts;
+	@Column(columnDefinition = "TEXT")
+	private String responseMessage;
 
 	@Enumerated(EnumType.STRING)
-	private CodeStatus status;
+	private DataIntegrationReferenceType dataReference;
 
-	private LocalDateTime lastAttemptAt;
+	private String dataReferenceId;
 
-	@Transient
-	private Boolean active;
+	private String technicalGuidanceId;
+
+	private String beneficiaryId;
+
+	private String dataCreatedId;
+
+	private Integer attempts;
+
+	@ManyToOne
+	private Account account;
 
 	@Column(updatable = false)
 	private LocalDateTime createdAt;
@@ -62,12 +73,10 @@ public class AccountCode extends BaseEntity<String> {
 
 	private String updatedBy;
 
-	@Transient
 	private Boolean deleted;
 
-	@Transient
 	private LocalDateTime deletedAt;
 
-	@Transient
 	private String deletedBy;
+
 }

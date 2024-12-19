@@ -4,18 +4,13 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
-import br.com.database_copier.enums.CodeStatus;
 import br.com.database_copier.util.GenericUtils;
 import br.com.neoapp.base.BaseEntity;
 import lombok.Data;
@@ -24,32 +19,43 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@DynamicUpdate
-@Table(name = "account_code", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "address", schema = GenericUtils.SOURCE_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
-public class AccountCode extends BaseEntity<String> {
+public class Address extends BaseEntity<String> {
 
-	private static final long serialVersionUID = -981480765939021268L;
+	private static final long serialVersionUID = 1366942716900437107L;
 
 	@Id
+	@Column
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
-	@ManyToOne
-	private Account account;
+	private String street;
 
-	private String code;
+	private String number;
 
-	private int attempts;
+	@Column(columnDefinition = "TEXT")
+	private String complement;
 
-	@Enumerated(EnumType.STRING)
-	private CodeStatus status;
+	private String district;
 
-	private LocalDateTime lastAttemptAt;
+	private String city;
 
-	@Transient
+	private String state;
+
+	private String country;
+
+	private String postalCode;
+
+	@Column(columnDefinition = "TEXT")
+	private String referencePoint;
+
+	private Double latitude;
+
+	private Double longitude;
+
 	private Boolean active;
 
 	@Column(updatable = false)

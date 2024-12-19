@@ -1,163 +1,84 @@
 package br.com.database_copier.entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import br.com.database_copier.enums.EthnicityEnum;
-import br.com.database_copier.enums.GenderEnum;
-import br.com.database_copier.enums.MaritalStatusEnum;
-import br.com.database_copier.enums.ProviderClassification;
-import br.com.database_copier.enums.ProviderStatus;
+import org.hibernate.annotations.GenericGenerator;
+
 import br.com.database_copier.util.GenericUtils;
-import br.com.database_copier.util.LocalDateConverter;
-import br.com.database_copier.util.LocalDateTimeConverter;
+import br.com.neoapp.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * @author weslleymatosdecarvalho
- *
- */
 @Data
 @Entity
-@Table(name = "provider", schema = GenericUtils.TARGET_SCHEMA)
+@Table(name = "provider", schema = GenericUtils.SOURCE_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
-public class Provider {
+public class Provider extends BaseEntity<String> {
+
+	private static final long serialVersionUID = 521418863705706930L;
 
 	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
-
-	private Boolean deleted;
-
-	@Convert(converter = LocalDateTimeConverter.class)
-	private LocalDateTime createdAt;
-
-	private String createdBy;
-
-	@Convert(converter = LocalDateTimeConverter.class)
-	private LocalDateTime updatedAt;
-
-	private String updatedBy;
-
-	@Convert(converter = LocalDateTimeConverter.class)
-	private LocalDateTime deletedAt;
-
-	private String deletedBy;
-
-	private String accountId;
-
-	@Convert(converter = LocalDateConverter.class)
-	@Column(columnDefinition = ("DATE"))
-	private LocalDate accreditationDate;
-
-	private String registration;
 
 	private String name;
 
-	private String socialName;
-
-	private Boolean isCorporate;
-
-	private String taxNumber;
-
-	@Convert(converter = LocalDateConverter.class)
-	@Column(columnDefinition = ("DATE"))
-	private LocalDate birthDate;
-
-	@Enumerated(EnumType.STRING)
-	private GenderEnum gender;
-
-	@Enumerated(EnumType.STRING)
-	private MaritalStatusEnum maritalStatus;
-
-	@Enumerated(EnumType.STRING)
-	private ProviderStatus providerStatus;
-
-	@Enumerated(EnumType.STRING)
-	private EthnicityEnum ethnicityEnum;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "\"classification\"")
-	private ProviderClassification classification;
-
-	@ManyToOne
-	private Occupation occupation;
-
-	private String certificateNumber;
-
-	private String corporateName;
-
-	private String corporateTaxNumber;
-
-	private String bank;
-
-	private String bankCode;
-
-	private String agency;
-
-	private String accountNumber;
-
-	private String accountDigit;
-
-	private String pixKey;
-
+	@Column(columnDefinition = "TEXT")
 	private String imageUrl;
 
-	@OneToOne
-	private Supplier supplier;
-
-	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String tags;
 
+	@ManyToMany
+	@JoinTable(name = "provider_insurance", schema = GenericUtils.SOURCE_SCHEMA)
+	private List<Insurance> insurances;
+
+	private String phone;
+
+	@Column(columnDefinition = "TEXT")
+	private String about;
+
+	@OneToOne(optional = false)
+	private Address address;
+
+	private Double rating;
+
+	private Integer reviewsNumber;
+
+	@Transient
 	private Boolean active;
 
-	@OneToMany(mappedBy = "provider")
-	private List<ProviderFormation> formations = new ArrayList<>();
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
 
-	@OneToMany(mappedBy = "provider")
-	private List<ProviderAddress> addresses = new ArrayList<>();
-
-	@OneToMany(mappedBy = "provider")
-	private List<ProviderPhone> phones = new ArrayList<>();
-
-	@OneToMany(mappedBy = "provider")
-	private List<ProviderEmail> emails = new ArrayList<>();
-
-	@OneToMany(mappedBy = "provider")
-	private List<ProviderLanguage> languages = new ArrayList<>();
-
-	@OneToMany(mappedBy = "provider")
-	private List<ProviderHealthPlan> plans = new ArrayList<>();
-
-	@OneToMany(mappedBy = "provider")
-	private List<ProviderAdditionalCourse> courses = new ArrayList<>();
-
-	@OneToMany(mappedBy = "provider")
-	private List<ProviderServiceModel> services = new ArrayList<>();
-
-	@OneToMany(mappedBy = "provider")
-	private List<ProviderAttachment> attachments = new ArrayList<>();
+	@Column(updatable = false)
+	private String createdBy;
 
 	@Transient
-	private String occupationId;
+	private LocalDateTime updatedAt;
 
 	@Transient
-	private String supplierId;
+	private String updatedBy;
 
+	@Transient
+	private Boolean deleted;
+
+	@Transient
+	private LocalDateTime deletedAt;
+
+	@Transient
+	private String deletedBy;
 }

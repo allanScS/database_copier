@@ -1,6 +1,8 @@
 package br.com.database_copier.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,14 +10,15 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
-import br.com.database_copier.enums.CodeStatus;
+import br.com.database_copier.enums.CallStatus;
 import br.com.database_copier.util.GenericUtils;
 import br.com.neoapp.base.BaseEntity;
 import lombok.Data;
@@ -24,13 +27,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@DynamicUpdate
-@Table(name = "account_code", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "call", schema = GenericUtils.SOURCE_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
-public class AccountCode extends BaseEntity<String> {
+public class Call extends BaseEntity<String> {
 
-	private static final long serialVersionUID = -981480765939021268L;
+	private static final long serialVersionUID = 7375095246961189795L;
 
 	@Id
 	@GeneratedValue(generator = "uuid")
@@ -38,19 +40,36 @@ public class AccountCode extends BaseEntity<String> {
 	private String id;
 
 	@ManyToOne
-	private Account account;
+	private Channel channel;
 
-	private String code;
+	@ManyToOne
+	private Account patient;
 
-	private int attempts;
+	@ManyToOne
+	private Account receiver;
+
+	@ManyToOne
+	private Account directReceiver;
+
+	@Column(columnDefinition = "TEXT")
+	private String review;
+
+	private Double rating;
+
+	@ManyToMany
+	@JoinTable(name = "call_participants", schema = GenericUtils.SOURCE_SCHEMA)
+	private List<Account> participants = new ArrayList<>();
 
 	@Enumerated(EnumType.STRING)
-	private CodeStatus status;
+	private CallStatus callStatus;
 
-	private LocalDateTime lastAttemptAt;
+	private LocalDateTime startedAt;
 
-	@Transient
+	private LocalDateTime endedAt;
+
 	private Boolean active;
+
+	private Boolean callToPatient;
 
 	@Column(updatable = false)
 	private LocalDateTime createdAt;
