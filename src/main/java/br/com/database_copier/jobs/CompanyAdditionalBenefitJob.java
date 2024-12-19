@@ -23,7 +23,7 @@ public class CompanyAdditionalBenefitJob {
 				"updated_by", "description", "seq", "company_id" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

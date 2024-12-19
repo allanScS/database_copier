@@ -24,7 +24,7 @@ public class SpreadsheetImportJob {
 				"account_id", "status" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

@@ -27,7 +27,7 @@ public class ProviderJob {
 				"supplier_id", "classification" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

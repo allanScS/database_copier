@@ -23,7 +23,7 @@ public class AccountJob {
 				"updated_by", "active", "email", "image_url", "name", "password", "role", "phone", "two_factors_type" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

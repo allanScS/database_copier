@@ -23,7 +23,7 @@ public class ProviderPaymentItemJob {
 				"updated_by", "value", "patient_case_forwarding_attendance_id", "provider_payment_id" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

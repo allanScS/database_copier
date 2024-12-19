@@ -25,7 +25,7 @@ public class PatientCaseEvolutionJob {
 				"provider_id", "created_by_account_name", "attendance_hours", "no_show" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

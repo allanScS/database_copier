@@ -24,7 +24,7 @@ public class SupplierAddressJob {
 				"longitude", "number", "postal_code", "reference_point", "state", "street", "supplier_id" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

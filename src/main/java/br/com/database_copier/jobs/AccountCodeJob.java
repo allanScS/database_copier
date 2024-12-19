@@ -23,7 +23,7 @@ public class AccountCodeJob {
 				"updated_by", "attempts", "code", "last_attempt_at", "status", "account_id", "code_type" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

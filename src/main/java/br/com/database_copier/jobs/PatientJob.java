@@ -26,7 +26,7 @@ public class PatientJob {
 				"import_natura_data_id", "attendances_size", "cases_size", "bank_data_id" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

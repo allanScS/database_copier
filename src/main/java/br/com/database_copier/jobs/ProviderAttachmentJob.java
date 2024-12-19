@@ -23,7 +23,7 @@ public class ProviderAttachmentJob {
 				"updated_by", "file_extension", "filename", "provider_id", "exhibition_name" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

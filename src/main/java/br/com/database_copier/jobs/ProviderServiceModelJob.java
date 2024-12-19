@@ -23,7 +23,7 @@ public class ProviderServiceModelJob {
 				"updated_by", "service_model_type", "value", "provider_id", "support_type" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

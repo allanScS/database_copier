@@ -23,7 +23,7 @@ public class PatientFamilyGroupJob {
 				"updated_by", "family_group_type", "patient_id", "relative_id" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

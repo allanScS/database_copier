@@ -294,7 +294,7 @@ public class DatabaseCopierApplication {
 
 		final Duration duration = Duration.between(start, LocalDateTime.now());
 
-		System.out.println("Duração: " + duration.toDaysPart() + " dias e " + duration.toHoursPart() + " horas "
+		System.out.println("Duracao: " + duration.toDaysPart() + " dias e " + duration.toHoursPart() + " horas "
 				+ duration.toMinutesPart() + " minutos");
 
 		System.exit(200);

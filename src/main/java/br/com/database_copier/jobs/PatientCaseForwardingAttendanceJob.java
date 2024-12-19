@@ -25,7 +25,7 @@ public class PatientCaseForwardingAttendanceJob {
 				"service_model_type", "support_type", "attendance_hours", "attendance_ended_at" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

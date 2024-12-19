@@ -23,7 +23,7 @@ public class ProviderServiceModelAvailabilityJob {
 				"updated_by", "end_time", "start_time", "weekday", "provider_service_model_id" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

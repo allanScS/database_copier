@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import br.com.database_copier.enums.AccountOwner;
 import br.com.database_copier.enums.BodyType;
 import br.com.database_copier.enums.BranchOfActivityEnum;
+import br.com.database_copier.enums.CallTypeEnum;
 import br.com.database_copier.enums.CategoryTypeEnum;
 import br.com.database_copier.enums.CodeStatus;
 import br.com.database_copier.enums.CodeTypeEnum;
@@ -62,16 +62,7 @@ public class AbstractConverter<E> {
 
 	private String parametersFailed;
 
-	public AbstractConverter<E> convertjsonToEntityList(final Class<E> reference, final JSONArray dataArray) {
-
-		for (final Object object : dataArray) {
-			entities.add(convertJsonToEntity(reference, object.toString()));
-		}
-		return this;
-
-	}
-
-	private E convertJsonToEntity(final Class<E> reference, final String json) {
+	public E convertJsonToEntity(final Class<E> reference, final JSONObject json) {
 
 		try {
 			final Constructor<E> constructor = reference.getDeclaredConstructor();
@@ -79,7 +70,7 @@ public class AbstractConverter<E> {
 
 			final var entity = constructor.newInstance();
 
-			final Map<String, Object> map = new JSONObject(json).toMap();
+			final Map<String, Object> map = json.toMap();
 
 			for (Map.Entry<String, Object> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
@@ -157,6 +148,10 @@ public class AbstractConverter<E> {
 
 							case "CategoryTypeEnum":
 								field.set(entity, CategoryTypeEnum.valueOf(value));
+								break;
+
+							case "CallTypeEnum":
+								field.set(entity, CallTypeEnum.valueOf(value));
 								break;
 
 							case "CodeStatus":

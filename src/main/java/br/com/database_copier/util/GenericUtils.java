@@ -3,11 +3,11 @@ package br.com.database_copier.util;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import br.com.database_copier.entities.Account;
@@ -81,20 +81,15 @@ public class GenericUtils {
 
 	}
 
-	public static JSONArray objectsToJson(final List<Object[]> objList, final String[] fields) {
-		final JSONArray jsonArray = new JSONArray();
+	public static JSONObject objectToJson(final Object[] obj, final String[] fields) {
 
-		for (Object[] row : objList) {
-			final JSONObject jsonObject = new JSONObject();
+		final JSONObject jsonObject = new JSONObject();
 
-			for (int i = 0; i < row.length; i++) {
-				jsonObject.put(convertToCamelCase(fields[i]), row[i]);
-			}
-
-			jsonArray.put(jsonObject);
+		for (int i = 0; i < obj.length; i++) {
+			jsonObject.put(convertToCamelCase(fields[i]), obj[i]);
 		}
 
-		return jsonArray;
+		return jsonObject;
 	}
 
 	private static String convertToCamelCase(String fieldName) {
@@ -124,7 +119,6 @@ public class GenericUtils {
 //			return localTime.minusHours(3);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> void executePage(final String[] fields, final String sourceTable, final String targetTable,
 			final Integer itensPerPage, final Integer page, final Integer totalPages, final Session source,
 			final Class<T> entityType)
@@ -138,14 +132,13 @@ public class GenericUtils {
 
 		final String query = GenericUtils.buildSql(fields, sourceTable, GenericUtils.SOURCE_SCHEMA, itensPerPage, page);
 
-		final List<Object[]> list = source.createSQLQuery(query).list();
+		final ScrollableResults results = source.createNativeQuery(query).setTimeout(600000)
+				.scroll(ScrollMode.FORWARD_ONLY);
 
-		final AbstractConverter<T> converter = new AbstractConverter<T>().convertjsonToEntityList(entityType,
-				GenericUtils.objectsToJson(list, fields));
+		while (results.next()) {
 
-		final List<T> entityList = converter.getEntities();
-
-		for (T entity : entityList) {
+			final T entity = new AbstractConverter<T>().convertJsonToEntity(entityType,
+					GenericUtils.objectToJson(results.get(), fields));
 
 			setDependencies(entity, entityType);
 
@@ -155,7 +148,7 @@ public class GenericUtils {
 			final Object idValue = idField.get(entity);
 
 			final String result = (String) target
-					.createSQLQuery(
+					.createNativeQuery(
 							"SELECT id FROM " + GenericUtils.TARGET_SCHEMA + "." + targetTable + " WHERE id = :id")
 					.setParameter("id", idValue).uniqueResult();
 

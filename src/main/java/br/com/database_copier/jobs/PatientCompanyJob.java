@@ -25,7 +25,7 @@ public class PatientCompanyJob {
 				"cost_center_id", "level_id", "last_work_leave_date" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

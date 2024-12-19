@@ -23,7 +23,7 @@ public class BenefitsApplicationFormQuestionsAndAnswersJob {
 				"updated_by", "answer", "question", "benefits_application_form_id", "index" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

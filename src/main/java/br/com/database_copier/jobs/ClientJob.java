@@ -24,7 +24,7 @@ public class ClientJob {
 				"email_html_body", "has_work_leave_information", "companies_size", "patients_size" };
 
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 

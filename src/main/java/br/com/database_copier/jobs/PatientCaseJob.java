@@ -27,7 +27,7 @@ public class PatientCaseJob {
 				"carelink_sessions", "provider_sessions", "participate_satisfaction_survey", "reason_for_work_leave",
 				"work_leave_end_date", "work_leave_start_date" };
 		final BigInteger totalElements = (BigInteger) source
-				.createSQLQuery(
+				.createNativeQuery(
 						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
 				.uniqueResult();
 
