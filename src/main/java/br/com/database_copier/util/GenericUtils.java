@@ -119,45 +119,41 @@ public class GenericUtils {
 //			return localTime.minusHours(3);
 	}
 
-	public static <T> void executePage(final String[] fields, final String sourceTable, final String targetTable,
-			final Integer itensPerPage, final Integer page, final Integer totalPages, final Session source,
-			final Class<T> entityType) {
+	public static <T> void executePage(String[] fields, String sourceTable, String targetTable, Integer itensPerPage,
+			Integer page, Integer totalPages, Session source, Class<T> entityType) {
 
-		boolean success = false;
+		Boolean success = false;
+		Session target = null;
+		Transaction targetTransaction = null;
+		ScrollableResults results = null;
+		T entity = null;
+
+		String query = GenericUtils.buildSql(fields, sourceTable, GenericUtils.SOURCE_SCHEMA, itensPerPage, page);
 
 		while (!success) {
 			try {
 				System.out.printf("BUSCANDO %s PAGINA: %d/%d%n", entityType.getSimpleName(), page + 1, totalPages);
 
-				try (Session target = HibernateUtil.startSessionFactoryTargetDatabase().openSession()) {
-					final Transaction targetTransaction = target.beginTransaction();
+				target = HibernateUtil.startSessionFactoryTargetDatabase().openSession();
+				targetTransaction = target.beginTransaction();
 
-					final String query = GenericUtils.buildSql(fields, sourceTable, GenericUtils.SOURCE_SCHEMA,
-							itensPerPage, page);
+				results = source.createNativeQuery(query).setTimeout(600000).setFetchSize(itensPerPage)
+						.scroll(ScrollMode.FORWARD_ONLY);
 
-					try (ScrollableResults results = source.createNativeQuery(query).setTimeout(600000)
-							.setFetchSize(itensPerPage).scroll(ScrollMode.FORWARD_ONLY)) {
+				while (results.next()) {
 
-						int count = 0;
-						while (results.next()) {
+					entity = new AbstractConverter<T>().convertJsonToEntity(entityType,
+							GenericUtils.objectToJson(results.get(), fields));
 
-							final T entity = new AbstractConverter<T>().convertJsonToEntity(entityType,
-									GenericUtils.objectToJson(results.get(), fields));
+					setDependencies(entity, entityType);
 
-							setDependencies(entity, entityType);
+					target.save(entity);
 
-							target.save(entity);
-
-							if (++count % 50 == 0) {
-								target.flush();
-								target.clear();
-							}
-						}
-					}
-
-					targetTransaction.commit();
 				}
 
+				targetTransaction.commit();
+				target.clear();
+				target.close();
 				success = true;
 
 			} catch (Exception e) {
@@ -170,6 +166,23 @@ public class GenericUtils {
 				}
 			}
 		}
+
+		results = null;
+		query = null;
+		targetTransaction = null;
+		target = null;
+		success = true;
+		fields = null;
+		sourceTable = null;
+		targetTable = null;
+		itensPerPage = null;
+		page = null;
+		totalPages = null;
+		source = null;
+		entityType = null;
+		success = null;
+
+		System.gc();
 	}
 
 	public static <T> void setDependencies(T entity, final Class<T> entityType) {

@@ -37,12 +37,8 @@ public class PatientImportNaturaDataJob {
 
 			threadPool.execute(() -> {
 
-				try {
-					GenericUtils.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
-							PatientImportNaturaData.class);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				GenericUtils.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
+						PatientImportNaturaData.class);
 
 			});
 
