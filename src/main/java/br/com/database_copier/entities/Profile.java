@@ -9,13 +9,9 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import br.com.database_copier.enums.Role;
 import br.com.database_copier.util.GenericUtils;
@@ -36,9 +32,6 @@ public class Profile extends BaseEntity<String> {
 
 	private static final long serialVersionUID = -5173693959225504245L;
 	
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	private String name;
