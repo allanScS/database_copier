@@ -1,20 +1,27 @@
 package br.com.database_copier.jobs;
 
 import java.math.BigInteger;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.hibernate.Session;
 
 import br.com.database_copier.entities.PatientCompany;
+import br.com.database_copier.util.ExecutePageUtil;
 import br.com.database_copier.util.GenericUtils;
 
 public class PatientCompanyJob {
 
 	public static void execute(final Integer itensPerPage, final Integer poolLimit, final Session source) {
 
-		final ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(poolLimit);
+		final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(poolLimit, poolLimit, 0L, TimeUnit.MILLISECONDS,
+				new LinkedBlockingQueue<>(), runnable -> {
+					Thread t = new Thread(runnable);
+					t.setDaemon(false);
+					t.setName("CustomPool-" + t.getId());
+					return t;
+				});
 
 		final String sourceTable = "patient_company";
 		final String targetTable = "patientCompany";
@@ -39,8 +46,16 @@ public class PatientCompanyJob {
 			threadPool.execute(() -> {
 
 				try {
-					GenericUtils.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
+
+					ExecutePageUtil executePageUtil = new ExecutePageUtil();
+
+					executePageUtil.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
 							PatientCompany.class);
+
+					executePageUtil = null;
+
+					System.gc();
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

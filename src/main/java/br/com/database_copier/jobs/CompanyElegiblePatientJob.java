@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.hibernate.Session;
 
 import br.com.database_copier.entities.CompanyElegiblePatient;
+import br.com.database_copier.util.ExecutePageUtil;
 import br.com.database_copier.util.GenericUtils;
 
 public class CompanyElegiblePatientJob {
@@ -37,8 +38,16 @@ public class CompanyElegiblePatientJob {
 			threadPool.execute(() -> {
 
 				try {
-					GenericUtils.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
+
+					ExecutePageUtil executePageUtil = new ExecutePageUtil();
+
+					executePageUtil.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
 							CompanyElegiblePatient.class);
+
+					executePageUtil = null;
+
+					System.gc();
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

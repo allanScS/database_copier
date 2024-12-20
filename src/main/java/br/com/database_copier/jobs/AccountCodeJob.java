@@ -2,12 +2,14 @@ package br.com.database_copier.jobs;
 
 import java.math.BigInteger;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.hibernate.Session;
 
 import br.com.database_copier.entities.AccountCode;
+import br.com.database_copier.util.ExecutePageUtil;
 import br.com.database_copier.util.GenericUtils;
 
 public class AccountCodeJob {
@@ -36,8 +38,16 @@ public class AccountCodeJob {
 
 			threadPool.execute(() -> {
 				try {
-					GenericUtils.executePage(fields.clone(), sourceTable, targetTable, itensPerPage, page2, totalPages,
-							source, AccountCode.class);
+
+					ExecutePageUtil executePageUtil = new ExecutePageUtil();
+
+					executePageUtil.executePage(fields.clone(), sourceTable, targetTable, itensPerPage, page2,
+							totalPages, source, AccountCode.class);
+
+					executePageUtil = null;
+
+					System.gc();
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
