@@ -1,26 +1,33 @@
 package br.com.database_copier.jobs;
 
 import java.math.BigInteger;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.hibernate.Session;
 
 import br.com.database_copier.entities.AccountCode;
+import br.com.database_copier.util.ExecutePageUtil;
 import br.com.database_copier.util.GenericUtils;
 
 public class AccountCodeJob {
 
 	public static void execute(final Integer itensPerPage, final Integer poolLimit, final Session source) {
 
-		final ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(poolLimit);
+		final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(poolLimit, poolLimit, 0L, TimeUnit.MILLISECONDS,
+				new LinkedBlockingQueue<>(), runnable -> {
+					Thread t = new Thread(runnable);
+					t.setDaemon(false);
+					t.setName("CustomPool-" + t.getId());
+					return t;
+				});
 
 		final String sourceTable = "account_code";
 		final String targetTable = "accountCode";
 
 		final String[] fields = { "id", "created_at", "created_by", "deleted", "deleted_at", "deleted_by", "updated_at",
-				"updated_by", "attempts", "code", "last_attempt_at", "status", "account_id", "code_type" };
+				"updated_by", "attempts", "code", "last_attempt_at", "status", "account_id", "active" };
 
 		final BigInteger totalElements = (BigInteger) source
 				.createNativeQuery(
@@ -36,8 +43,16 @@ public class AccountCodeJob {
 
 			threadPool.execute(() -> {
 				try {
-					GenericUtils.executePage(fields.clone(), sourceTable, targetTable, itensPerPage, page2, totalPages,
-							source, AccountCode.class);
+
+					ExecutePageUtil executePageUtil = new ExecutePageUtil();
+
+					executePageUtil.executePage(fields.clone(), sourceTable, targetTable, itensPerPage, page2,
+							totalPages, source, AccountCode.class);
+
+					executePageUtil = null;
+
+					System.gc();
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

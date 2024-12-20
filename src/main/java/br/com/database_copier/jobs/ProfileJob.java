@@ -1,93 +1,75 @@
 package br.com.database_copier.jobs;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigInteger;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.hibernate.Session;
 
-import br.com.database_copier.enums.Role;
-import br.com.database_copier.target.entities.Profile;
+import br.com.database_copier.entities.Profile;
+import br.com.database_copier.util.ExecutePageUtil;
 import br.com.database_copier.util.GenericUtils;
-import br.com.database_copier.util.HibernateUtil;
-import br.com.neoapp.base.AbstractConverter;
 
 public class ProfileJob {
 
-	@SuppressWarnings("unchecked")
-	public static void execute() {
+	public static void execute(final Integer itensPerPage, final Integer poolLimit, final Session source) {
 
-		System.out.println("Montando query");
+		final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(poolLimit, poolLimit, 0L, TimeUnit.MILLISECONDS,
+				new LinkedBlockingQueue<>(), runnable -> {
+					Thread t = new Thread(runnable);
+					t.setDaemon(false);
+					t.setName("CustomPool-" + t.getId());
+					return t;
+				});
 
-		String table = "profile";
+		final String sourceTable = "profile";
+		final String targetTable = "profile";
 
 		final String[] fields = { "id", "created_at", "created_by", "deleted", "deleted_at", "deleted_by",
 				"description", "name", "updated_at", "updated_by", "createdat", "createdby", "deletedat", "deletedby",
 				"updatedat", "updatedby" };
 
-		final String query = GenericUtils.buildSql(fields, table, GenericUtils.SOURCE_SCHEMA);
+		final BigInteger totalElements = (BigInteger) source
+				.createNativeQuery(
+						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
+				.uniqueResult();
 
-		System.out.println("Iniciando seção com origem");
+		int totalPages = (totalElements.intValue() + itensPerPage - 1) / itensPerPage;
+		int page = 0;
 
-		Session session = HibernateUtil.startSessionFactorySourceDatabase().getCurrentSession();
-		session.beginTransaction();
-		System.out.println("Seção iniciada com origem");
+		while (page + 1 <= totalPages) {
 
-		final AbstractConverter<Profile> converter = new AbstractConverter<Profile>().convertjsonToEntityList(
-				Profile.class, GenericUtils.objectsToJson(session.createSQLQuery(query).list(), fields));
+			final int page2 = page;
 
-		List<Profile> entityList = converter.getEntities();
+			threadPool.execute(() -> {
+				try {
 
-		for (final Profile profile : entityList) {
-			profile.setRoles(new ArrayList<>());
+					ExecutePageUtil executePageUtil = new ExecutePageUtil();
 
-			final String subQuery = "SELECT profile_id, role FROM " + GenericUtils.SOURCE_SCHEMA
-					+ ".profiles_roles WHERE profile_id = '" + profile.getId() + "'";
+					executePageUtil.executePage(fields.clone(), sourceTable, targetTable, itensPerPage, page2,
+							totalPages, source, Profile.class);
 
-			final List<Object[]> objList = session.createSQLQuery(subQuery).list();
+					executePageUtil = null;
 
-			for (final Object[] obj : objList) {
-				if (obj[1] != null)
-					profile.getRoles().add(Role.valueOf(obj[1].toString()));
+					System.gc();
 
-			}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+
+			page++;
 		}
 
-		System.out.println("Lista de dados criada");
+		threadPool.shutdown();
 
-		HibernateUtil.getSessionFactory().close();
-		System.out.println("Transaction commited and Session closed");
-
-		Session insertSession = HibernateUtil.startSessionFactoryTargetDatabase().getCurrentSession();
-		insertSession.beginTransaction();
-		System.out.println("First database transaction started");
-		int i = 0;
-
-		for (i = 0; i < entityList.size(); i++) {
-
-			final Profile entity = entityList.get(i);
-
-			if (i % 3000 == 0) {
-				insertSession.getTransaction().commit();
-				insertSession = HibernateUtil.startSessionFactoryTargetDatabase().getCurrentSession();
-				insertSession.beginTransaction();
-			}
-
-			String result = (String) insertSession
-					.createSQLQuery("SELECT id FROM " + GenericUtils.TARGET_SCHEMA + "." + table + " WHERE id = :id")
-					.setParameter("id", entity.getId()).uniqueResult();
-
-			if (result == null) {
-				insertSession.save(entity);
-				System.out.println("Inserted MAP: " + entity.getId());
-			}
+		try {
+			threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException e) {
+			System.out.println("ERRO :" + e.getMessage());
 		}
 
-		if (!insertSession.getTransaction().wasCommitted()) {
-			insertSession.getTransaction().commit();
-		}
-
-		HibernateUtil.getSessionFactory().close();
-		System.out.println("Transaction commited and Session closed");
-		System.out.println(i + " new data inserted");
 	}
+
 }

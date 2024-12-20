@@ -1,77 +1,76 @@
 package br.com.database_copier.jobs;
 
-import java.util.List;
+import java.math.BigInteger;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.hibernate.Session;
 
-import br.com.database_copier.target.entities.Address;
+import br.com.database_copier.entities.Address;
+import br.com.database_copier.util.ExecutePageUtil;
 import br.com.database_copier.util.GenericUtils;
-import br.com.database_copier.util.HibernateUtil;
-import br.com.neoapp.base.AbstractConverter;
 
 public class AddressJob {
 
-	@SuppressWarnings("unchecked")
-	public static void execute() {
+	public static void execute(final Integer itensPerPage, final Integer poolLimit, final Session source) {
 
-		System.out.println("Montando query");
+		final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(poolLimit, poolLimit, 0L, TimeUnit.MILLISECONDS,
+				new LinkedBlockingQueue<>(), runnable -> {
+					Thread t = new Thread(runnable);
+					t.setDaemon(false);
+					t.setName("CustomPool-" + t.getId());
+					return t;
+				});
 
-		String table = "address";
+		final String sourceTable = "address";
+		final String targetTable = "address";
 
 		final String[] fields = { "id", "active", "city", "complement", "country", "created_at", "created_by",
 				"district", "latitude", "longitude", "number", "postal_code", "reference_point", "state", "street",
 				"updated_at", "updated_by", "createdat", "createdby", "postalcode", "referencepoint", "updatedat",
 				"updatedby" };
 
-		final String query = GenericUtils.buildSql(fields, table, GenericUtils.SOURCE_SCHEMA);
+		final BigInteger totalElements = (BigInteger) source
+				.createNativeQuery(
+						"SELECT COUNT(entity.id) FROM " + GenericUtils.SOURCE_SCHEMA + "." + sourceTable + " AS entity")
+				.uniqueResult();
 
-		System.out.println("Iniciando seção com origem");
+		int totalPages = (totalElements.intValue() + itensPerPage - 1) / itensPerPage;
+		int page = 0;
 
-		Session session = HibernateUtil.startSessionFactorySourceDatabase().getCurrentSession();
-		session.beginTransaction();
-		System.out.println("Seção iniciada com origem");
+		while (page + 1 <= totalPages) {
 
-		final AbstractConverter<Address> converter = new AbstractConverter<Address>().convertjsonToEntityList(
-				Address.class, GenericUtils.objectsToJson(session.createSQLQuery(query).list(), fields));
+			final int page2 = page;
 
-		List<Address> entityList = converter.getEntities();
+			threadPool.execute(() -> {
+				try {
 
-		System.out.println("Lista de dados criada");
+					ExecutePageUtil executePageUtil = new ExecutePageUtil();
 
-		HibernateUtil.getSessionFactory().close();
-		System.out.println("Transaction commited and Session closed");
+					executePageUtil.executePage(fields.clone(), sourceTable, targetTable, itensPerPage, page2,
+							totalPages, source, Address.class);
 
-		Session insertSession = HibernateUtil.startSessionFactoryTargetDatabase().getCurrentSession();
-		insertSession.beginTransaction();
-		System.out.println("First database transaction started");
-		int i = 0;
+					executePageUtil = null;
 
-		for (i = 0; i < entityList.size(); i++) {
+					System.gc();
 
-			final Address entity = entityList.get(i);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 
-			if (i % 3000 == 0) {
-				insertSession.getTransaction().commit();
-				insertSession = HibernateUtil.startSessionFactoryTargetDatabase().getCurrentSession();
-				insertSession.beginTransaction();
-			}
-
-			String result = (String) insertSession
-					.createSQLQuery("SELECT id FROM " + GenericUtils.TARGET_SCHEMA + "." + table + " WHERE id = :id")
-					.setParameter("id", entity.getId()).uniqueResult();
-
-			if (result == null) {
-				insertSession.save(entity);
-				System.out.println("Inserted MAP: " + entity.getId());
-			}
+			page++;
 		}
 
-		if (!insertSession.getTransaction().wasCommitted()) {
-			insertSession.getTransaction().commit();
+		threadPool.shutdown();
+
+		try {
+			threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException e) {
+			System.out.println("ERRO :" + e.getMessage());
 		}
 
-		HibernateUtil.getSessionFactory().close();
-		System.out.println("Transaction commited and Session closed");
-		System.out.println(i + " new data inserted");
 	}
+
 }

@@ -78,37 +78,37 @@ import br.com.database_copier.util.HibernateUtil;
 public class DatabaseCopierApplication {
 
 	public static void main(String[] args) {
-		int itensPerPage = 4000;
-		int poolLimit = 70;
+		int itensPerPage = 3000;
+		int poolLimit = 50;
 
 		final LocalDateTime start = LocalDateTime.now();
 
 		Session source = HibernateUtil.startSessionFactorySourceDatabase().openSession();
 
 		final Runnable[] jobs = { () -> AccountJob.execute(itensPerPage, poolLimit, source),
-				() -> AccountCodeJob.execute(itensPerPage, poolLimit, source),
-				() -> BankDataJob.execute(itensPerPage, poolLimit, source),
-				() -> ClientJob.execute(itensPerPage, poolLimit, source),
-				() -> ClientAddressJob.execute(itensPerPage, poolLimit, source),
-				() -> ClientEmailJob.execute(itensPerPage, poolLimit, source),
-				() -> ClientPhoneJob.execute(itensPerPage, poolLimit, source),
-				() -> CategoryJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyAdditionalBenefitJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyAddressJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyAttachmentJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyElegiblePatientJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyEmailJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyHealthPlanJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyManagerJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyManagerEmailJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyManagerPhoneJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyPhoneJob.execute(itensPerPage, poolLimit, source),
-				() -> CompanyProductJob.execute(itensPerPage, poolLimit, source),
-				() -> BranchJob.execute(itensPerPage, poolLimit, source),
-				() -> CostCenterJob.execute(itensPerPage, poolLimit, source),
-				() -> OccupationJob.execute(itensPerPage, poolLimit, source),
-				() -> LevelJob.execute(itensPerPage, poolLimit, source),
+//				() -> AccountCodeJob.execute(itensPerPage, poolLimit, source),
+//				() -> BankDataJob.execute(itensPerPage, poolLimit, source),
+//				() -> ClientJob.execute(itensPerPage, poolLimit, source),
+//				() -> ClientAddressJob.execute(itensPerPage, poolLimit, source),
+//				() -> ClientEmailJob.execute(itensPerPage, poolLimit, source),
+//				() -> ClientPhoneJob.execute(itensPerPage, poolLimit, source),
+//				() -> CategoryJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyAdditionalBenefitJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyAddressJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyAttachmentJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyElegiblePatientJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyEmailJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyHealthPlanJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyManagerJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyManagerEmailJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyManagerPhoneJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyPhoneJob.execute(itensPerPage, poolLimit, source),
+//				() -> CompanyProductJob.execute(itensPerPage, poolLimit, source),
+//				() -> BranchJob.execute(itensPerPage, poolLimit, source),
+//				() -> CostCenterJob.execute(itensPerPage, poolLimit, source),
+//				() -> OccupationJob.execute(itensPerPage, poolLimit, source),
+//				() -> LevelJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientImportNaturaDataJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientAddressJob.execute(itensPerPage, poolLimit, source),
@@ -159,7 +159,7 @@ public class DatabaseCopierApplication {
 
 			jobs[i].run();
 
-			System.out.println("Limpando cache do Hibernate...");
+			System.out.println("\nLimpando cache do Hibernate...");
 
 			source.clear();
 

@@ -58,23 +58,19 @@ import lombok.Getter;
 @Getter
 public class AbstractConverter<E> {
 
-	private List<E> entities = new ArrayList<>();
-
-	private String parametersFailed;
-
 	public E convertJsonToEntity(final Class<E> reference, final JSONObject json) {
 
 		try {
-			final Constructor<E> constructor = reference.getDeclaredConstructor();
+			Constructor<E> constructor = reference.getDeclaredConstructor();
 			constructor.setAccessible(true);
 
-			final var entity = constructor.newInstance();
+			var entity = constructor.newInstance();
 
-			final Map<String, Object> map = json.toMap();
+			Map<String, Object> map = json.toMap();
 
 			for (Map.Entry<String, Object> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
-					final String value = entry.getValue().toString();
+					String value = entry.getValue().toString();
 
 					if (!value.isEmpty() && !value.isBlank())
 						try {
@@ -224,6 +220,7 @@ public class AbstractConverter<E> {
 
 							case "PriorityEnum":
 								field.set(entity, PriorityEnum.valueOf(value));
+								break;
 
 							case "ProblemHolderEnum":
 								field.set(entity, ProblemHolderEnum.valueOf(value));
@@ -251,6 +248,7 @@ public class AbstractConverter<E> {
 
 							case "RoleEnum":
 								field.set(entity, RoleEnum.valueOf(value));
+								break;
 
 							case "ScheduleTypeEnum":
 								field.set(entity, ScheduleTypeEnum.valueOf(value));
@@ -285,26 +283,22 @@ public class AbstractConverter<E> {
 								break;
 
 							default:
-								if (this.parametersFailed == null)
-									this.parametersFailed = "Falha ao converter o parametro: " + entry.getKey()
-											+ " valor: " + value + ", tipo não mapeado";
-								else if (!this.parametersFailed.contains(entry.getKey()))
-									this.parametersFailed = this.parametersFailed + "\nFalha ao converter o parametro: "
-											+ entry.getKey() + " valor: " + value + ", tipo não mapeado";
+								break;
 							}
+
+							value = null;
 
 						} catch (Exception e) {
 
-							if (entry.getKey() != null)
-								if (this.parametersFailed == null)
-									this.parametersFailed = "Falha ao converter o parametro: " + entry.getKey()
-											+ " valor: " + value;
-								else if (!this.parametersFailed.contains(entry.getKey()))
-									this.parametersFailed = this.parametersFailed + "\nFalha ao converter o parametro: "
-											+ entry.getKey() + " valor: " + value;
+							System.out
+									.println("Falha ao converter o parametro: " + entry.getKey() + " valor: " + value);
 						}
 				}
 			}
+
+			constructor = null;
+			map = null;
+
 			return entity;
 
 		} catch (Exception e) {
@@ -314,8 +308,8 @@ public class AbstractConverter<E> {
 
 	}
 
-	private static LocalDateTime parseLocalDateTime(String dateString) {
-		final List<DateTimeFormatter> formatters = new ArrayList<>();
+	private LocalDateTime parseLocalDateTime(String dateString) {
+		List<DateTimeFormatter> formatters = new ArrayList<>();
 		formatters.add(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS"));
 		formatters.add(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSS"));
 		formatters.add(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSS"));
@@ -331,7 +325,11 @@ public class AbstractConverter<E> {
 				dateString = dateString.replace("Z", "");
 			for (DateTimeFormatter formatter : formatters) {
 				try {
-					return GenericUtils.adjustLocalDateTime(LocalDateTime.parse(dateString, formatter));
+					LocalDateTime localDateTime = GenericUtils
+							.adjustLocalDateTime(LocalDateTime.parse(dateString, formatter));
+					formatters = null;
+					dateString = null;
+					return localDateTime;
 				} catch (java.time.format.DateTimeParseException ignored) {
 				}
 			}
@@ -340,8 +338,8 @@ public class AbstractConverter<E> {
 		return null;
 	}
 
-	public static LocalDate parseLocalDate(String dateString) {
-		final List<DateTimeFormatter> formatters = new ArrayList<>();
+	public LocalDate parseLocalDate(String dateString) {
+		List<DateTimeFormatter> formatters = new ArrayList<>();
 		formatters.add(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		formatters.add(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		formatters.add(DateTimeFormatter.ISO_LOCAL_DATE);
@@ -351,7 +349,10 @@ public class AbstractConverter<E> {
 				dateString = dateString.replace("Z", "");
 			for (DateTimeFormatter formatter : formatters) {
 				try {
-					return LocalDate.parse(dateString, formatter);
+					LocalDate localDate = LocalDate.parse(dateString, formatter);
+					formatters = null;
+					dateString = null;
+					return localDate;
 				} catch (java.time.format.DateTimeParseException ignored) {
 				}
 			}
@@ -360,8 +361,8 @@ public class AbstractConverter<E> {
 		return null;
 	}
 
-	private static LocalTime parseLocalTime(String dateString) {
-		final List<DateTimeFormatter> formatters = new ArrayList<>();
+	private LocalTime parseLocalTime(String dateString) {
+		List<DateTimeFormatter> formatters = new ArrayList<>();
 		formatters.add(DateTimeFormatter.ofPattern("HH:mm:ss"));
 		formatters.add(DateTimeFormatter.ISO_LOCAL_TIME);
 
@@ -370,7 +371,10 @@ public class AbstractConverter<E> {
 				dateString = dateString.replace("Z", "");
 			for (DateTimeFormatter formatter : formatters) {
 				try {
-					return LocalTime.parse(dateString, formatter);
+					LocalTime localTime = LocalTime.parse(dateString, formatter);
+					formatters = null;
+					dateString = null;
+					return localTime;
 				} catch (java.time.format.DateTimeParseException ignored) {
 				}
 			}
