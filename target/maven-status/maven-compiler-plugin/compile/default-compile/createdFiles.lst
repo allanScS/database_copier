@@ -159,6 +159,7 @@ br\com\database_copier\entities\CustomerSurvey.class
 br\com\database_copier\entities\Branch.class
 br\com\database_copier\entities\ProviderAdditionalCourse.class
 br\com\database_copier\enums\ServiceModelTypeEnum.class
+br\com\database_copier\util\ExecutePageUtil.class
 br\com\database_copier\entities\PatientCompany.class
 br\com\database_copier\enums\RankingType.class
 br\com\database_copier\enums\SupportTypeEnum.class

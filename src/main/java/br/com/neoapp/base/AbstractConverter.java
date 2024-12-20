@@ -220,6 +220,7 @@ public class AbstractConverter<E> {
 
 							case "PriorityEnum":
 								field.set(entity, PriorityEnum.valueOf(value));
+								break;
 
 							case "ProblemHolderEnum":
 								field.set(entity, ProblemHolderEnum.valueOf(value));
@@ -247,6 +248,7 @@ public class AbstractConverter<E> {
 
 							case "RoleEnum":
 								field.set(entity, RoleEnum.valueOf(value));
+								break;
 
 							case "ScheduleTypeEnum":
 								field.set(entity, ScheduleTypeEnum.valueOf(value));

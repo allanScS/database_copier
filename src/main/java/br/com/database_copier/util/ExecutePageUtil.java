@@ -76,10 +76,6 @@ public class ExecutePageUtil {
 			} catch (Exception e) {
 				System.err.println("Erro ao processar a página: " + (page + 1));
 
-				if (targetTransaction != null && targetTransaction.isActive()) {
-					targetTransaction.rollback();
-				}
-
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException interruptedException) {

@@ -5,11 +5,35 @@ import java.time.LocalDateTime;
 
 import org.hibernate.Session;
 
+import br.com.database_copier.jobs.AccountCodeJob;
+import br.com.database_copier.jobs.AccountJob;
+import br.com.database_copier.jobs.BankDataJob;
 import br.com.database_copier.jobs.BenefitsApplicationFormJob;
 import br.com.database_copier.jobs.BenefitsApplicationFormQuestionsAndAnswersJob;
+import br.com.database_copier.jobs.BranchJob;
+import br.com.database_copier.jobs.CategoryJob;
+import br.com.database_copier.jobs.ClientAddressJob;
+import br.com.database_copier.jobs.ClientEmailJob;
+import br.com.database_copier.jobs.ClientJob;
+import br.com.database_copier.jobs.ClientPhoneJob;
+import br.com.database_copier.jobs.CompanyAdditionalBenefitJob;
+import br.com.database_copier.jobs.CompanyAddressJob;
+import br.com.database_copier.jobs.CompanyAttachmentJob;
+import br.com.database_copier.jobs.CompanyElegiblePatientJob;
+import br.com.database_copier.jobs.CompanyEmailJob;
+import br.com.database_copier.jobs.CompanyHealthPlanJob;
+import br.com.database_copier.jobs.CompanyJob;
+import br.com.database_copier.jobs.CompanyManagerEmailJob;
+import br.com.database_copier.jobs.CompanyManagerJob;
+import br.com.database_copier.jobs.CompanyManagerPhoneJob;
+import br.com.database_copier.jobs.CompanyPhoneJob;
+import br.com.database_copier.jobs.CompanyProductJob;
+import br.com.database_copier.jobs.CostCenterJob;
 import br.com.database_copier.jobs.CustomerSurveyJob;
 import br.com.database_copier.jobs.EventJob;
 import br.com.database_copier.jobs.ExpenseJob;
+import br.com.database_copier.jobs.LevelJob;
+import br.com.database_copier.jobs.OccupationJob;
 import br.com.database_copier.jobs.PatientAddressJob;
 import br.com.database_copier.jobs.PatientAttachmentJob;
 import br.com.database_copier.jobs.PatientCaseAttachmentJob;
@@ -20,6 +44,7 @@ import br.com.database_copier.jobs.PatientCaseJob;
 import br.com.database_copier.jobs.PatientCompanyJob;
 import br.com.database_copier.jobs.PatientEmailJob;
 import br.com.database_copier.jobs.PatientFamilyGroupJob;
+import br.com.database_copier.jobs.PatientImportNaturaDataJob;
 import br.com.database_copier.jobs.PatientJob;
 import br.com.database_copier.jobs.PatientPhoneJob;
 import br.com.database_copier.jobs.ProviderAdditionalCourseJob;
@@ -60,8 +85,7 @@ public class DatabaseCopierApplication {
 
 		Session source = HibernateUtil.startSessionFactorySourceDatabase().openSession();
 
-		final Runnable[] jobs = {
-//				() -> AccountJob.execute(itensPerPage, poolLimit, source),
+		final Runnable[] jobs = { () -> AccountJob.execute(itensPerPage, poolLimit, source),
 //				() -> AccountCodeJob.execute(itensPerPage, poolLimit, source),
 //				() -> BankDataJob.execute(itensPerPage, poolLimit, source),
 //				() -> ClientJob.execute(itensPerPage, poolLimit, source),
@@ -85,14 +109,14 @@ public class DatabaseCopierApplication {
 //				() -> CostCenterJob.execute(itensPerPage, poolLimit, source),
 //				() -> OccupationJob.execute(itensPerPage, poolLimit, source),
 //				() -> LevelJob.execute(itensPerPage, poolLimit, source),
-//				() -> PatientImportNaturaDataJob.execute(itensPerPage, poolLimit, source),
-//				() -> PatientJob.execute(itensPerPage, poolLimit, source),
-//				() -> PatientAddressJob.execute(itensPerPage, poolLimit, source),
-//				() -> PatientAttachmentJob.execute(itensPerPage, poolLimit, source),
-//				() -> PatientEmailJob.execute(itensPerPage, poolLimit, source),
-//				() -> PatientPhoneJob.execute(itensPerPage, poolLimit, source),
-//				() -> PatientFamilyGroupJob.execute(itensPerPage, poolLimit, source),
-//				() -> SubareaJob.execute(itensPerPage, poolLimit, source),
+				() -> PatientImportNaturaDataJob.execute(itensPerPage, poolLimit, source),
+				() -> PatientJob.execute(itensPerPage, poolLimit, source),
+				() -> PatientAddressJob.execute(itensPerPage, poolLimit, source),
+				() -> PatientAttachmentJob.execute(itensPerPage, poolLimit, source),
+				() -> PatientEmailJob.execute(itensPerPage, poolLimit, source),
+				() -> PatientPhoneJob.execute(itensPerPage, poolLimit, source),
+				() -> PatientFamilyGroupJob.execute(itensPerPage, poolLimit, source),
+				() -> SubareaJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientCompanyJob.execute(itensPerPage, poolLimit, source),
 				() -> TroubleAreaJob.execute(itensPerPage, poolLimit, source),
 				() -> TroubleTypeJob.execute(itensPerPage, poolLimit, source),
@@ -135,7 +159,7 @@ public class DatabaseCopierApplication {
 
 			jobs[i].run();
 
-			System.out.println("Limpando cache do Hibernate...");
+			System.out.println("\nLimpando cache do Hibernate...");
 
 			source.clear();
 
