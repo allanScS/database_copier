@@ -147,8 +147,7 @@ public class GenericUtils {
 
 					setDependencies(entity, entityType);
 
-					target.save(entity);
-
+					target.saveOrUpdate(entity);
 				}
 
 				targetTransaction.commit();

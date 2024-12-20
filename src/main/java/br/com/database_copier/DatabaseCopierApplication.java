@@ -53,8 +53,8 @@ import br.com.database_copier.util.HibernateUtil;
 public class DatabaseCopierApplication {
 
 	public static void main(String[] args) {
-		int itensPerPage = 4000;
-		int poolLimit = 70;
+		int itensPerPage = 3000;
+		int poolLimit = 50;
 
 		final LocalDateTime start = LocalDateTime.now();
 
@@ -86,7 +86,7 @@ public class DatabaseCopierApplication {
 //				() -> OccupationJob.execute(itensPerPage, poolLimit, source),
 //				() -> LevelJob.execute(itensPerPage, poolLimit, source),
 //				() -> PatientImportNaturaDataJob.execute(itensPerPage, poolLimit, source),
-				() -> PatientJob.execute(itensPerPage, poolLimit, source),
+//				() -> PatientJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientAddressJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientAttachmentJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientEmailJob.execute(itensPerPage, poolLimit, source),
