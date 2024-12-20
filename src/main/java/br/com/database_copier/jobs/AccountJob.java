@@ -1,7 +1,7 @@
 package br.com.database_copier.jobs;
 
 import java.math.BigInteger;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +15,13 @@ public class AccountJob {
 
 	public static void execute(final Integer itensPerPage, final Integer poolLimit, final Session source) {
 
-		final ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(poolLimit);
+		final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(poolLimit, poolLimit, 0L, TimeUnit.MILLISECONDS,
+				new LinkedBlockingQueue<>(), runnable -> {
+					Thread t = new Thread(runnable);
+					t.setDaemon(false);
+					t.setName("CustomPool-" + t.getId());
+					return t;
+				});
 
 		final String sourceTable = "account";
 		final String targetTable = "account";
