@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table(name = "data_integration", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "data_integration", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class DataIntegration extends BaseEntity<String> {
@@ -41,10 +41,10 @@ public class DataIntegration extends BaseEntity<String> {
 	@Enumerated(EnumType.STRING)
 	private DataIntegrationStatus status;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String message;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String responseMessage;
 
 	@Enumerated(EnumType.STRING)

@@ -26,8 +26,10 @@ public class AccountJob {
 		final String sourceTable = "account";
 		final String targetTable = "account";
 
-		final String[] fields = { "id", "created_at", "created_by", "deleted", "deleted_at", "deleted_by", "updated_at",
-				"updated_by", "active", "email", "image_url", "name", "password", "role", "phone", "two_factors_type" };
+		final String[] fields = { "id", "active", "authority", "birth_date", "created_at", "created_by", "deleted",
+				"deleted_at", "deleted_by", "email", "image_url", "name", "password", "phone", "pronoun", "status",
+				"tax_number", "updated_at", "updated_by", "address_id", "last_status_update", "speciality",
+				"profile_id", "confirm_data_deletion", "data_deletion_code" };
 
 		final BigInteger totalElements = (BigInteger) source
 				.createNativeQuery(
@@ -47,8 +49,8 @@ public class AccountJob {
 
 					ExecutePageUtil executePageUtil = new ExecutePageUtil();
 
-					executePageUtil.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages, source,
-							Account.class);
+					executePageUtil.executePage(fields, sourceTable, targetTable, itensPerPage, page2, totalPages,
+							source, Account.class);
 
 					executePageUtil = null;
 

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "hospitalization", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "hospitalization", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Hospitalization extends BaseEntity<String> {
@@ -38,7 +38,7 @@ public class Hospitalization extends BaseEntity<String> {
 
 	private String hospitalName;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String description;
 
 	@Column(updatable = false)

@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table(name = "mass_message", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "mass_message", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class MassMessage extends BaseEntity<String> {
@@ -37,10 +37,10 @@ public class MassMessage extends BaseEntity<String> {
 	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String descriptionHtml;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String descriptionPlainText;
 
 	@ManyToOne

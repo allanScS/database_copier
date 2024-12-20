@@ -9,14 +9,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Transient;
 
 import br.com.database_copier.enums.AccountStatus;
 import br.com.database_copier.enums.Pronoun;
@@ -29,16 +26,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "account", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "account", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Account extends BaseEntity<String> {
 
 	private static final long serialVersionUID = -1274718802906899522L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	private String name;
@@ -49,6 +43,7 @@ public class Account extends BaseEntity<String> {
 
 	private String phone;
 
+	@Column(columnDefinition = ("DATE"))
 	private LocalDate birthDate;
 
 	private String taxNumber;
@@ -97,4 +92,9 @@ public class Account extends BaseEntity<String> {
 
 	private Boolean confirmDataDeletion;
 
+	@Transient
+	private String profileId;
+
+	@Transient
+	private String addressId;
 }

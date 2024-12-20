@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table(name = "channel", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "channel", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Channel extends BaseEntity<String> {
@@ -41,7 +41,7 @@ public class Channel extends BaseEntity<String> {
 	private String name;
 
 	@ManyToMany
-	@JoinTable(name = "channel_account", joinColumns = @JoinColumn(name = "channel_id"), inverseJoinColumns = @JoinColumn(name = "account_id"), schema = GenericUtils.SOURCE_SCHEMA)
+	@JoinTable(name = "channel_account", joinColumns = @JoinColumn(name = "channel_id"), inverseJoinColumns = @JoinColumn(name = "account_id"), schema = GenericUtils.TARGET_SCHEMA)
 	private List<Account> accounts = new ArrayList<>();
 
 	@Column(updatable = false)

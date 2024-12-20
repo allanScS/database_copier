@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.database_copier.entities.Account;
+import br.com.database_copier.entities.Profile;
 import br.com.database_copier.enums.Role;
 import br.com.neoapp.base.AbstractConverter;
 
@@ -98,15 +99,22 @@ public class ExecutePageUtil {
 
 				List<Role> roles = new ArrayList<>();
 
-				String query = "SELECT profile_id, role FROM " + GenericUtils.SOURCE_SCHEMA
+				String query = "SELECT profile_id, role FROM " + GenericUtils.TARGET_SCHEMA
 						+ ".profiles_roles WHERE profile_id = '" + id + "'";
 
-				List<Object[]> objList = source.createNativeQuery(query).list();
+				ScrollableResults results = source.createNativeQuery(query).setTimeout(600000)
+						.scroll(ScrollMode.FORWARD_ONLY);
 
-				for (final Object[] obj : objList) {
+				while (results.next()) {
+
+					Object[] obj = results.get();
+
 					if (obj[1] != null)
 						roles.add(Role.valueOf(obj[1].toString()));
+
+					obj = null;
 				}
+
 				field.set(entity, roles);
 
 				idField = null;
@@ -114,43 +122,53 @@ public class ExecutePageUtil {
 				field = null;
 				roles = null;
 				query = null;
-				objList = null;
 				source = null;
+				results = null;
 
 			}
 				break;
 
 			case "Account": {
-				
-				Field idField = entityType.getDeclaredField("id");
-				idField.setAccessible(true);
-				String id = (String) idField.get(entity);
-				Field field = entity.getClass().getDeclaredField("roles");
-				field.setAccessible(true);
-				
-				List<Role> roles = new ArrayList<>();
-				
-				String query = "SELECT profile_id, role FROM " + GenericUtils.SOURCE_SCHEMA
-						+ ".profiles_roles WHERE profile_id = '" + id + "'";
-				
-				List<Object[]> objList = source.createNativeQuery(query).list();
-				
-				for (final Object[] obj : objList) {
-					if (obj[1] != null)
-						roles.add(Role.valueOf(obj[1].toString()));
+
+				Field profileIdFie = entityType.getDeclaredField("profileId");
+				profileIdFie.setAccessible(true);
+				String profileId = (String) profileIdFie.get(entity);
+
+				Field addressIdFie = entityType.getDeclaredField("addressId");
+				addressIdFie.setAccessible(true);
+				String addressId = (String) addressIdFie.get(entity);
+
+				if (profileId != null) {
+					Field field = entity.getClass().getDeclaredField("profile");
+					field.setAccessible(true);
+
+					Profile profile = new Profile();
+					profile.setId(profileId);
+					field.set(entity, profile);
+
+					field = null;
+					profile = null;
 				}
-				field.set(entity, roles);
-				
-				idField = null;
-				id = null;
-				field = null;
-				roles = null;
-				query = null;
-				objList = null;
-				source = null;
-				
+
+				if (addressId != null) {
+					Field field = entity.getClass().getDeclaredField("address");
+					field.setAccessible(true);
+
+					Profile profile = new Profile();
+					profile.setId(addressId);
+					field.set(entity, profile);
+
+					field = null;
+					profile = null;
+				}
+
+				profileIdFie = null;
+				profileId = null;
+				addressIdFie = null;
+				addressId = null;
+
 			}
-			break;
+				break;
 
 			case "AccountCode": {
 

@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class GenericUtils {
 
-	public static final String SOURCE_SCHEMA = "carelink_eap";
+	public static final String SOURCE_SCHEMA = "central_saude_24h";
 
 	public static final String TARGET_SCHEMA = "dbo";
 

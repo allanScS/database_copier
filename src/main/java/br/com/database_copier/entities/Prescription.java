@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "prescription", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "prescription", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Prescription extends BaseEntity<String> {

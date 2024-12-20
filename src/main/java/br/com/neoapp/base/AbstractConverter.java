@@ -14,44 +14,22 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
-import br.com.database_copier.enums.AccountOwner;
-import br.com.database_copier.enums.BodyType;
-import br.com.database_copier.enums.BranchOfActivityEnum;
-import br.com.database_copier.enums.CallTypeEnum;
-import br.com.database_copier.enums.CategoryTypeEnum;
+import br.com.database_copier.enums.AccountStatus;
+import br.com.database_copier.enums.CallStatus;
 import br.com.database_copier.enums.CodeStatus;
-import br.com.database_copier.enums.CodeTypeEnum;
-import br.com.database_copier.enums.CoverageEnum;
-import br.com.database_copier.enums.DepartmentEnum;
-import br.com.database_copier.enums.ElegibleEnum;
-import br.com.database_copier.enums.EthnicityEnum;
-import br.com.database_copier.enums.EventStatusEnum;
-import br.com.database_copier.enums.EventTypeEnum;
-import br.com.database_copier.enums.EvolutionTypeEnum;
-import br.com.database_copier.enums.FamilyGroupTypeEnum;
-import br.com.database_copier.enums.FormationStatusEnum;
-import br.com.database_copier.enums.ForwardingStatusEnum;
-import br.com.database_copier.enums.GenderEnum;
-import br.com.database_copier.enums.LanguageEnum;
-import br.com.database_copier.enums.MaritalStatusEnum;
-import br.com.database_copier.enums.NotifierEnum;
-import br.com.database_copier.enums.OriginEnum;
-import br.com.database_copier.enums.PriorityEnum;
-import br.com.database_copier.enums.ProblemHolderEnum;
-import br.com.database_copier.enums.ProductEnum;
-import br.com.database_copier.enums.ProviderClassification;
-import br.com.database_copier.enums.ProviderStatus;
-import br.com.database_copier.enums.RankingType;
-import br.com.database_copier.enums.RelationshipEnum;
-import br.com.database_copier.enums.RoleEnum;
-import br.com.database_copier.enums.ScheduleTypeEnum;
-import br.com.database_copier.enums.ServiceChannelEnum;
-import br.com.database_copier.enums.ServiceModelTypeEnum;
-import br.com.database_copier.enums.SpreadsheetImportOperationType;
-import br.com.database_copier.enums.SpreadsheetImportStatus;
-import br.com.database_copier.enums.SupportTypeEnum;
-import br.com.database_copier.enums.TwoFactorsType;
-import br.com.database_copier.enums.WeekDayEnum;
+import br.com.database_copier.enums.DataIntegrationReferenceType;
+import br.com.database_copier.enums.DataIntegrationStatus;
+import br.com.database_copier.enums.DeviceNotificationStatus;
+import br.com.database_copier.enums.DeviceNotificationType;
+import br.com.database_copier.enums.EmailBody;
+import br.com.database_copier.enums.EvaluationType;
+import br.com.database_copier.enums.GenderAffected;
+import br.com.database_copier.enums.Kinship;
+import br.com.database_copier.enums.MessageType;
+import br.com.database_copier.enums.NewsStatus;
+import br.com.database_copier.enums.Pronoun;
+import br.com.database_copier.enums.Speciality;
+import br.com.database_copier.enums.SystemType;
 import br.com.database_copier.util.GenericUtils;
 import lombok.Getter;
 
@@ -130,156 +108,68 @@ public class AbstractConverter<E> {
 								field.set(entity, Short.parseShort(value));
 								break;
 
-							case "AccountOwner":
-								field.set(entity, AccountOwner.valueOf(value));
+							case "AccountStatus":
+								field.set(entity, AccountStatus.valueOf(value));
 								break;
 
-							case "BodyType":
-								field.set(entity, BodyType.valueOf(value));
-								break;
-
-							case "BranchOfActivityEnum":
-								field.set(entity, BranchOfActivityEnum.valueOf(value));
-								break;
-
-							case "CategoryTypeEnum":
-								field.set(entity, CategoryTypeEnum.valueOf(value));
-								break;
-
-							case "CallTypeEnum":
-								field.set(entity, CallTypeEnum.valueOf(value));
+							case "CallStatus":
+								field.set(entity, CallStatus.valueOf(value));
 								break;
 
 							case "CodeStatus":
 								field.set(entity, CodeStatus.valueOf(value));
 								break;
 
-							case "CodeTypeEnum":
-								field.set(entity, CodeTypeEnum.valueOf(value));
+							case "DataIntegrationStatus":
+								field.set(entity, DataIntegrationStatus.valueOf(value));
 								break;
 
-							case "CoverageEnum":
-								field.set(entity, CoverageEnum.valueOf(value));
+							case "DeviceNotificationStatus":
+								field.set(entity, DeviceNotificationStatus.valueOf(value));
 								break;
 
-							case "DepartmentEnum":
-								field.set(entity, DepartmentEnum.valueOf(value));
+							case "DataIntegrationReferenceType":
+								field.set(entity, DataIntegrationReferenceType.valueOf(value));
 								break;
 
-							case "ElegibleEnum":
-								field.set(entity, ElegibleEnum.valueOf(value));
+							case "DeviceNotificationType":
+								field.set(entity, DeviceNotificationType.valueOf(value));
 								break;
 
-							case "EthnicityEnum":
-								field.set(entity, EthnicityEnum.valueOf(value));
+							case "EmailBody":
+								field.set(entity, EmailBody.valueOf(value));
 								break;
 
-							case "EventStatusEnum":
-								field.set(entity, EventStatusEnum.valueOf(value));
+							case "EvaluationType":
+								field.set(entity, EvaluationType.valueOf(value));
 								break;
 
-							case "EventTypeEnum":
-								field.set(entity, EventTypeEnum.valueOf(value));
+							case "GenderAffected":
+								field.set(entity, GenderAffected.valueOf(value));
 								break;
 
-							case "EvolutionTypeEnum":
-								field.set(entity, EvolutionTypeEnum.valueOf(value));
+							case "Kinship":
+								field.set(entity, Kinship.valueOf(value));
 								break;
 
-							case "FamilyGroupTypeEnum":
-								field.set(entity, FamilyGroupTypeEnum.valueOf(value));
+							case "MessageType":
+								field.set(entity, MessageType.valueOf(value));
 								break;
 
-							case "FormationStatusEnum":
-								field.set(entity, FormationStatusEnum.valueOf(value));
+							case "NewsStatus":
+								field.set(entity, NewsStatus.valueOf(value));
 								break;
 
-							case "ForwardingStatusEnum":
-								field.set(entity, ForwardingStatusEnum.valueOf(value));
+							case "Pronoun":
+								field.set(entity, Pronoun.valueOf(value));
 								break;
 
-							case "GenderEnum":
-								field.set(entity, GenderEnum.valueOf(value));
+							case "SystemType":
+								field.set(entity, SystemType.valueOf(value));
 								break;
 
-							case "LanguageEnum":
-								field.set(entity, LanguageEnum.valueOf(value));
-								break;
-
-							case "MaritalStatusEnum":
-								field.set(entity, MaritalStatusEnum.valueOf(value));
-								break;
-
-							case "NotifierEnum":
-								field.set(entity, NotifierEnum.valueOf(value));
-								break;
-
-							case "OriginEnum":
-								field.set(entity, OriginEnum.valueOf(value));
-								break;
-
-							case "PriorityEnum":
-								field.set(entity, PriorityEnum.valueOf(value));
-								break;
-
-							case "ProblemHolderEnum":
-								field.set(entity, ProblemHolderEnum.valueOf(value));
-								break;
-
-							case "ProductEnum":
-								field.set(entity, ProductEnum.valueOf(value));
-								break;
-
-							case "ProviderClassification":
-								field.set(entity, ProviderClassification.valueOf(value));
-								break;
-
-							case "ProviderStatus":
-								field.set(entity, ProviderStatus.valueOf(value));
-								break;
-
-							case "RankingType":
-								field.set(entity, RankingType.valueOf(value));
-								break;
-
-							case "RelationshipEnum":
-								field.set(entity, RelationshipEnum.valueOf(value));
-								break;
-
-							case "RoleEnum":
-								field.set(entity, RoleEnum.valueOf(value));
-								break;
-
-							case "ScheduleTypeEnum":
-								field.set(entity, ScheduleTypeEnum.valueOf(value));
-								break;
-
-							case "ServiceChannelEnum":
-								field.set(entity, ServiceChannelEnum.valueOf(value));
-								break;
-
-							case "ServiceModelTypeEnum":
-								field.set(entity, ServiceModelTypeEnum.valueOf(value));
-								break;
-
-							case "SpreadsheetImportOperationType":
-								field.set(entity, SpreadsheetImportOperationType.valueOf(value));
-								break;
-
-							case "SpreadsheetImportStatus":
-								field.set(entity, SpreadsheetImportStatus.valueOf(value));
-								break;
-
-							case "SupportTypeEnum":
-								field.set(entity, SupportTypeEnum.valueOf(value));
-								break;
-
-							case "TwoFactorsType":
-								field.set(entity, TwoFactorsType.valueOf(value));
-								break;
-
-							case "WeekDayEnum":
-								field.set(entity, WeekDayEnum.valueOf(value));
+							case "Speciality":
+								field.set(entity, Speciality.valueOf(value));
 								break;
 
 							default:

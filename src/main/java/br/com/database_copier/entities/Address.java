@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "address", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "address", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Address extends BaseEntity<String> {
@@ -28,7 +28,7 @@ public class Address extends BaseEntity<String> {
 
 	private String number;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String complement;
 
 	private String district;
@@ -41,7 +41,7 @@ public class Address extends BaseEntity<String> {
 
 	private String postalCode;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String referencePoint;
 
 	private Double latitude;

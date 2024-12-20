@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table(name = "message", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "message", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Message extends BaseEntity<String> {
@@ -34,17 +34,17 @@ public class Message extends BaseEntity<String> {
 	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String descriptionHtml;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String descriptionPlainText;
 
 	private Boolean viwed;
 
 	private LocalDateTime viwedAt;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String viwedByIds;
 
 	@ManyToOne

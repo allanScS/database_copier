@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "provider", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "provider", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Provider extends BaseEntity<String> {
@@ -37,18 +37,18 @@ public class Provider extends BaseEntity<String> {
 
 	private String name;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String imageUrl;
 
 	private String tags;
 
 	@ManyToMany
-	@JoinTable(name = "provider_insurance", schema = GenericUtils.SOURCE_SCHEMA)
+	@JoinTable(name = "provider_insurance", schema = GenericUtils.TARGET_SCHEMA)
 	private List<Insurance> insurances;
 
 	private String phone;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String about;
 
 	@OneToOne(optional = false)

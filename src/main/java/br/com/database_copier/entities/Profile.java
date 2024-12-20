@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table(name = "profile", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "profile", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Profile extends BaseEntity<String> {
@@ -41,7 +41,7 @@ public class Profile extends BaseEntity<String> {
 	@ElementCollection
 	@Enumerated(EnumType.STRING)
 	@JoinTable(name = "profiles_roles", joinColumns = 
-	@JoinColumn(name = "profile_id"), schema = GenericUtils.SOURCE_SCHEMA)
+	@JoinColumn(name = "profile_id"), schema = GenericUtils.TARGET_SCHEMA)
 	@Column(name = "role")
 	private List<Role> roles = new ArrayList<>();
 

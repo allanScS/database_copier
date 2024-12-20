@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "insurance", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "insurance", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Insurance extends BaseEntity<String> {

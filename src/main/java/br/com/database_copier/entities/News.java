@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "news", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "news", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class News extends BaseEntity<String> {
@@ -36,10 +36,10 @@ public class News extends BaseEntity<String> {
 	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String title;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String descriptionInHtml;
 
 	private String thumbnail;
@@ -49,7 +49,7 @@ public class News extends BaseEntity<String> {
 	private String videoUrl;
 
 	@ManyToMany
-	@JoinTable(name = "news_segments", schema = GenericUtils.SOURCE_SCHEMA)
+	@JoinTable(name = "news_segments", schema = GenericUtils.TARGET_SCHEMA)
 	private List<Company> segments;
 
 	@Enumerated(EnumType.STRING)

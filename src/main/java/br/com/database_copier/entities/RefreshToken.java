@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table(name = "refreshToken", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "refreshToken", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class RefreshToken extends BaseEntity<String> {
@@ -34,7 +34,7 @@ public class RefreshToken extends BaseEntity<String> {
 	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String refreshToken;
 
 	private Boolean expired;

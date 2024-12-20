@@ -1,4 +1,5 @@
 package br.com.database_copier.entities;
+
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "my_health", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "my_health", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class MyHealth extends BaseEntity<String> {
@@ -33,7 +34,7 @@ public class MyHealth extends BaseEntity<String> {
 	@ManyToOne
 	private Account patient;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String healthConditionText;
 
 	private String glucose;

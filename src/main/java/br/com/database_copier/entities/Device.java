@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table(name = "device", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "device", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Device extends BaseEntity<String> {

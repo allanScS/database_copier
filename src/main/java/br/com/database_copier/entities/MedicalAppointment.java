@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "medical_appointment", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "medical_appointment", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class MedicalAppointment extends BaseEntity<String> {
@@ -37,10 +37,10 @@ public class MedicalAppointment extends BaseEntity<String> {
 	@ManyToOne
 	private Call call;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String review;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String comments;
 
 	private Boolean isHospitalization;

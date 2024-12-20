@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "work_shift", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "work_shift", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class WorkShift extends BaseEntity<String> {

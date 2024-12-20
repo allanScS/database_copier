@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "health_condition", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "health_condition", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class HealthCondition extends BaseEntity<String> {

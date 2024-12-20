@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "schedule", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "schedule", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Schedule extends BaseEntity<String> {

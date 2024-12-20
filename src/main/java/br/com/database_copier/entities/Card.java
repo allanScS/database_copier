@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "card", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "card", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Card extends BaseEntity<String> {
@@ -41,6 +41,7 @@ public class Card extends BaseEntity<String> {
 
 	private String exhibitionName;
 
+	@Column(columnDefinition = ("DATE"))
 	private LocalDate exhibitionBirthdate;
 
 	private String registration;

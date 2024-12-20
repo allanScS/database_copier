@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "notification", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "notification", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Notification extends BaseEntity<String> {
@@ -38,7 +38,7 @@ public class Notification extends BaseEntity<String> {
 	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String description;
 
 	@Enumerated(EnumType.STRING)
@@ -48,7 +48,7 @@ public class Notification extends BaseEntity<String> {
 	private Account receiver;
 
 	@OneToMany
-	@JoinTable(name = "notification_related", schema = GenericUtils.SOURCE_SCHEMA)
+	@JoinTable(name = "notification_related", schema = GenericUtils.TARGET_SCHEMA)
 	private List<Related> related;
 
 	private Boolean visualized;

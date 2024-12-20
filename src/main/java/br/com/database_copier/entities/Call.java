@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "call", schema = GenericUtils.SOURCE_SCHEMA)
+@Table(name = "call", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class Call extends BaseEntity<String> {
@@ -51,13 +51,13 @@ public class Call extends BaseEntity<String> {
 	@ManyToOne
 	private Account directReceiver;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String review;
 
 	private Double rating;
 
 	@ManyToMany
-	@JoinTable(name = "call_participants", schema = GenericUtils.SOURCE_SCHEMA)
+	@JoinTable(name = "call_participants", schema = GenericUtils.TARGET_SCHEMA)
 	private List<Account> participants = new ArrayList<>();
 
 	@Enumerated(EnumType.STRING)
