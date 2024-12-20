@@ -85,7 +85,8 @@ public class DatabaseCopierApplication {
 
 		Session source = HibernateUtil.startSessionFactorySourceDatabase().openSession();
 
-		final Runnable[] jobs = { () -> AccountJob.execute(itensPerPage, poolLimit, source),
+		final Runnable[] jobs = { 
+//				() -> AccountJob.execute(itensPerPage, poolLimit, source),
 //				() -> AccountCodeJob.execute(itensPerPage, poolLimit, source),
 //				() -> BankDataJob.execute(itensPerPage, poolLimit, source),
 //				() -> ClientJob.execute(itensPerPage, poolLimit, source),
@@ -109,7 +110,7 @@ public class DatabaseCopierApplication {
 //				() -> CostCenterJob.execute(itensPerPage, poolLimit, source),
 //				() -> OccupationJob.execute(itensPerPage, poolLimit, source),
 //				() -> LevelJob.execute(itensPerPage, poolLimit, source),
-				() -> PatientImportNaturaDataJob.execute(itensPerPage, poolLimit, source),
+//				() -> PatientImportNaturaDataJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientAddressJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientAttachmentJob.execute(itensPerPage, poolLimit, source),
