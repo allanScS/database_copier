@@ -111,7 +111,7 @@ public class DatabaseCopierApplication {
 //				() -> OccupationJob.execute(itensPerPage, poolLimit, source),
 //				() -> LevelJob.execute(itensPerPage, poolLimit, source),
 //				() -> PatientImportNaturaDataJob.execute(itensPerPage, poolLimit, source),
-				() -> PatientJob.execute(itensPerPage, poolLimit, source),
+//				() -> PatientJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientAddressJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientAttachmentJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientEmailJob.execute(itensPerPage, poolLimit, source),
