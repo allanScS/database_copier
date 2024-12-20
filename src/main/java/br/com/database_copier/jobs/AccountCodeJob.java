@@ -26,8 +26,8 @@ public class AccountCodeJob {
 		final String sourceTable = "account_code";
 		final String targetTable = "accountCode";
 
-		final String[] fields = { "id", "created_at", "created_by", "deleted", "deleted_at", "deleted_by", "updated_at",
-				"updated_by", "attempts", "code", "last_attempt_at", "status", "account_id", "active" };
+		final String[] fields = { "id", "attempts", "code", "created_at", "created_by", "last_attempt_at", "status",
+				"updated_at", "updated_by", "account_id" };
 
 		final BigInteger totalElements = (BigInteger) source
 				.createNativeQuery(

@@ -26,7 +26,7 @@ public class AccountJob {
 		final String sourceTable = "account";
 		final String targetTable = "account";
 
-		final String[] fields = { "id", "active", "authority", "birth_date", "created_at", "created_by", "deleted",
+		final String[] fields = { "id", "active", "birth_date", "created_at", "created_by", "deleted",
 				"deleted_at", "deleted_by", "email", "image_url", "name", "password", "phone", "pronoun", "status",
 				"tax_number", "updated_at", "updated_by", "address_id", "last_status_update", "speciality",
 				"profile_id", "confirm_data_deletion", "data_deletion_code" };

@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.com.database_copier.entities.Account;
+import br.com.database_copier.entities.Address;
 import br.com.database_copier.entities.Profile;
 import br.com.database_copier.enums.Role;
 import br.com.neoapp.base.AbstractConverter;
@@ -99,7 +100,7 @@ public class ExecutePageUtil {
 
 				List<Role> roles = new ArrayList<>();
 
-				String query = "SELECT profile_id, role FROM " + GenericUtils.TARGET_SCHEMA
+				String query = "SELECT profile_id, role FROM " + GenericUtils.SOURCE_SCHEMA
 						+ ".profiles_roles WHERE profile_id = '" + id + "'";
 
 				ScrollableResults results = source.createNativeQuery(query).setTimeout(600000)
@@ -154,12 +155,12 @@ public class ExecutePageUtil {
 					Field field = entity.getClass().getDeclaredField("address");
 					field.setAccessible(true);
 
-					Profile profile = new Profile();
-					profile.setId(addressId);
-					field.set(entity, profile);
+					Address address = new Address();
+					address.setId(addressId);
+					field.set(entity, address);
 
 					field = null;
-					profile = null;
+					address = null;
 				}
 
 				profileIdFie = null;
