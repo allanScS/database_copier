@@ -68,6 +68,8 @@ public class ExecutePageUtil {
 					setDependencies(entity, entityType);
 
 					target.saveOrUpdate(entity);
+					
+					entity = null;
 				}
 
 				targetTransaction.commit();

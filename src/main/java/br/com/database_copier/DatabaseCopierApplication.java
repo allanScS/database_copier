@@ -85,41 +85,44 @@ public class DatabaseCopierApplication {
 
 		Session source = HibernateUtil.startSessionFactorySourceDatabase().openSession();
 
-		final Runnable[] jobs = { 
-//				() -> AccountJob.execute(itensPerPage, poolLimit, source),
-//				() -> AccountCodeJob.execute(itensPerPage, poolLimit, source),
-//				() -> BankDataJob.execute(itensPerPage, poolLimit, source),
-//				() -> ClientJob.execute(itensPerPage, poolLimit, source),
-//				() -> ClientAddressJob.execute(itensPerPage, poolLimit, source),
-//				() -> ClientEmailJob.execute(itensPerPage, poolLimit, source),
-//				() -> ClientPhoneJob.execute(itensPerPage, poolLimit, source),
-//				() -> CategoryJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyAdditionalBenefitJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyAddressJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyAttachmentJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyElegiblePatientJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyEmailJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyHealthPlanJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyManagerJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyManagerEmailJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyManagerPhoneJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyPhoneJob.execute(itensPerPage, poolLimit, source),
-//				() -> CompanyProductJob.execute(itensPerPage, poolLimit, source),
-//				() -> BranchJob.execute(itensPerPage, poolLimit, source),
-//				() -> CostCenterJob.execute(itensPerPage, poolLimit, source),
-//				() -> OccupationJob.execute(itensPerPage, poolLimit, source),
-//				() -> LevelJob.execute(itensPerPage, poolLimit, source),
-//				() -> PatientImportNaturaDataJob.execute(itensPerPage, poolLimit, source),
-//				() -> PatientJob.execute(itensPerPage, poolLimit, source),
-				() -> PatientAddressJob.execute(itensPerPage, poolLimit, source),
-				() -> PatientAttachmentJob.execute(itensPerPage, poolLimit, source),
+		final Runnable[] step1 = { () -> AccountJob.execute(itensPerPage, poolLimit, source),
+				() -> AccountCodeJob.execute(itensPerPage, poolLimit, source),
+				() -> BankDataJob.execute(itensPerPage, poolLimit, source),
+				() -> ClientJob.execute(itensPerPage, poolLimit, source),
+				() -> ClientAddressJob.execute(itensPerPage, poolLimit, source),
+				() -> ClientEmailJob.execute(itensPerPage, poolLimit, source),
+				() -> ClientPhoneJob.execute(itensPerPage, poolLimit, source),
+				() -> CategoryJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyAdditionalBenefitJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyAddressJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyAttachmentJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyElegiblePatientJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyEmailJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyHealthPlanJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyManagerJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyManagerEmailJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyManagerPhoneJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyPhoneJob.execute(itensPerPage, poolLimit, source),
+				() -> CompanyProductJob.execute(itensPerPage, poolLimit, source),
+				() -> BranchJob.execute(itensPerPage, poolLimit, source),
+				() -> CostCenterJob.execute(itensPerPage, poolLimit, source),
+				() -> OccupationJob.execute(itensPerPage, poolLimit, source),
+				() -> LevelJob.execute(itensPerPage, poolLimit, source),
+				() -> PatientImportNaturaDataJob.execute(itensPerPage, poolLimit, source) };
+
+		final Runnable[] step2 = { () -> PatientJob.execute(itensPerPage, poolLimit, source) };
+
+		final Runnable[] step3 = { () -> PatientAddressJob.execute(itensPerPage, poolLimit, source) };
+
+		final Runnable[] step4 = { () -> PatientAttachmentJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientEmailJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientPhoneJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientFamilyGroupJob.execute(itensPerPage, poolLimit, source),
 				() -> SubareaJob.execute(itensPerPage, poolLimit, source),
-				() -> PatientCompanyJob.execute(itensPerPage, poolLimit, source),
-				() -> TroubleAreaJob.execute(itensPerPage, poolLimit, source),
+				() -> PatientCompanyJob.execute(itensPerPage, poolLimit, source) };
+
+		final Runnable[] step5 = { () -> TroubleAreaJob.execute(itensPerPage, poolLimit, source),
 				() -> TroubleTypeJob.execute(itensPerPage, poolLimit, source),
 				() -> TroubleSubtypeJob.execute(itensPerPage, poolLimit, source),
 				() -> PatientCaseJob.execute(itensPerPage, poolLimit, source),
@@ -154,6 +157,37 @@ public class DatabaseCopierApplication {
 				() -> SessionReviewJob.execute(itensPerPage, poolLimit, source),
 				() -> EventJob.execute(itensPerPage, poolLimit, source),
 				() -> ExpenseJob.execute(itensPerPage, poolLimit, source) };
+
+		Runnable[] jobs = null;
+
+		switch (args[0]) {
+		case "1":
+			jobs = step1;
+			break;
+
+		case "2":
+			jobs = step2;
+			break;
+
+		case "3":
+			jobs = step3;
+			break;
+
+		case "4":
+			jobs = step4;
+			break;
+
+		case "5":
+			jobs = step5;
+			break;
+
+		default:
+
+			System.out.println("Etapa invalida!");
+			System.exit(400);
+
+			break;
+		}
 
 		for (int i = 0; i < jobs.length; i++) {
 			System.out.printf("\nIMPORTANDO JOB %d/%d\n", i + 1, jobs.length);

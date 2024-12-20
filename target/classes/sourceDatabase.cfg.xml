@@ -5,16 +5,22 @@
 		<property name="hibernate.dialect">
 			org.hibernate.dialect.PostgreSQLDialect</property>
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+
 		<property name="hibernate.connection.url">
+			jdbc:postgresql://carelink-eap.ckio62gqmvpd.us-east-1.rds.amazonaws.com:5432/carelink_eap?statement_timeout=600000</property>
+		<property name="hibernate.connection.username">postgres</property>
+		<property name="hibernate.connection.password">hdsfSDHFshdfLDFGosjf</property>
+
+	<!-- PROD	<property name="hibernate.connection.url">
 			jdbc:postgresql://carelink-eap.chny5nt9ynjq.sa-east-1.rds.amazonaws.com:5432/carelink_eap?statement_timeout=600000</property>
 		<property name="hibernate.connection.username">postgres</property>
-		<property name="hibernate.connection.password">qiAJiToPHJsfWRIPRmuiTPgb</property>
+		<property name="hibernate.connection.password">qiAJiToPHJsfWRIPRmuiTPgb</property>  -->
 
 		<property name="connection_pool_size">15</property>
 
 		<property name="hibernate.jdbc.timeout">600</property>
-		<property name="hibernate.query.timeout">600</property> <!-- 600 segundos (10 minutos) -->
-
+		<property name="hibernate.query.timeout">600</property> <!-- 600 segundos
+		(10 minutos) -->
 
 
 		<property name="hibernate.current_session_context_class">thread</property>
