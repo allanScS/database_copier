@@ -20,8 +20,7 @@
 
 		<property name="hibernate.jdbc.timeout">600</property>
 		<property name="hibernate.query.timeout">600</property> <!-- 600 segundos (10 minutos) -->
-
-
+		
 		<property name="hibernate.current_session_context_class">thread</property>
 		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
 
