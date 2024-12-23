@@ -7,7 +7,7 @@
 		<property name="hibernate.connection.driver_class">
 			com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
 		<property name="hibernate.connection.url">
-			jdbc:sqlserver://dev16sql.carelink.com.br:14331;databaseName=CarelinkEAP;encrypt=true;trustServerCertificate=true</property>
+			jdbc:sqlserver://dev16sql.carelink.com.br:14331;databaseName=CarelinkEAPProducao;encrypt=true;trustServerCertificate=true</property>
 		<property name="hibernate.connection.username">neoapp</property>
 		<property name="hibernate.connection.password">@!Neo8445App=</property>
 

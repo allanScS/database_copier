@@ -36,6 +36,7 @@ public class GenericUtils {
 		sb.append(".");
 		sb.append(table);
 		sb.append(" AS entity");
+		sb.append(" ORDER BY id");
 		sb.append(" LIMIT ");
 		sb.append(itensPerPage);
 		sb.append(" OFFSET ");
