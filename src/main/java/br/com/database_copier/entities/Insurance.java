@@ -3,12 +3,8 @@ package br.com.database_copier.entities;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import br.com.database_copier.util.GenericUtils;
 import br.com.neoapp.base.BaseEntity;
@@ -25,9 +21,6 @@ public class Insurance extends BaseEntity<String> {
 
 	private static final long serialVersionUID = -5977374939865179660L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	private String name;

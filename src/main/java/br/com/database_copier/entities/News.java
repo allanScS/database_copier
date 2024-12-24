@@ -7,13 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import br.com.database_copier.enums.NewsStatus;
 import br.com.database_copier.util.GenericUtils;
@@ -31,9 +27,6 @@ public class News extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 3827167848863356970L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(MAX)")
@@ -49,7 +42,7 @@ public class News extends BaseEntity<String> {
 	private String videoUrl;
 
 	@ManyToMany
-	@JoinTable(name = "news_segments", schema = GenericUtils.TARGET_SCHEMA)
+	@JoinTable(name = "newsSegments", schema = GenericUtils.TARGET_SCHEMA)
 	private List<Company> segments;
 
 	@Enumerated(EnumType.STRING)

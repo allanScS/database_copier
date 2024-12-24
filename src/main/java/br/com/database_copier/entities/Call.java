@@ -8,15 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import br.com.database_copier.enums.CallStatus;
 import br.com.database_copier.util.GenericUtils;
@@ -34,9 +30,6 @@ public class Call extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 7375095246961189795L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	@ManyToOne
@@ -57,7 +50,7 @@ public class Call extends BaseEntity<String> {
 	private Double rating;
 
 	@ManyToMany
-	@JoinTable(name = "call_participants", schema = GenericUtils.TARGET_SCHEMA)
+	@JoinTable(name = "callParticipants", schema = GenericUtils.TARGET_SCHEMA)
 	private List<Account> participants = new ArrayList<>();
 
 	@Enumerated(EnumType.STRING)
@@ -89,4 +82,17 @@ public class Call extends BaseEntity<String> {
 
 	@Transient
 	private String deletedBy;
+
+	@Transient
+	private String channelId;
+	
+	@Transient
+	private String patientId;
+	
+	@Transient
+	private String receiverId;
+	
+	@Transient
+	private String directReceiverId;
+	
 }

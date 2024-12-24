@@ -7,15 +7,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import br.com.database_copier.enums.MessageType;
 import br.com.database_copier.util.GenericUtils;
@@ -33,9 +29,6 @@ public class Notification extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 5343334027682017414L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(MAX)")
@@ -48,7 +41,7 @@ public class Notification extends BaseEntity<String> {
 	private Account receiver;
 
 	@OneToMany
-	@JoinTable(name = "notification_related", schema = GenericUtils.TARGET_SCHEMA)
+	@JoinTable(name = "notificationRelated", schema = GenericUtils.TARGET_SCHEMA)
 	private List<Related> related;
 
 	private Boolean visualized;
@@ -76,4 +69,7 @@ public class Notification extends BaseEntity<String> {
 
 	@Transient
 	private String deletedBy;
+
+	@Transient
+	private String receiverId;
 }

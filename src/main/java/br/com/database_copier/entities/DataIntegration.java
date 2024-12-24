@@ -6,12 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Transient;
 
 import br.com.database_copier.enums.DataIntegrationReferenceType;
 import br.com.database_copier.enums.DataIntegrationStatus;
@@ -26,16 +23,13 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table(name = "data_integration", schema = GenericUtils.TARGET_SCHEMA)
+@Table(name = "dataIntegration", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class DataIntegration extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 6101910776879001187L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	@Enumerated(EnumType.STRING)
@@ -78,5 +72,8 @@ public class DataIntegration extends BaseEntity<String> {
 	private LocalDateTime deletedAt;
 
 	private String deletedBy;
+	
+	@Transient
+	private String accountId;
 
 }

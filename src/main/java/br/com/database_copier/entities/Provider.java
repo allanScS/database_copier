@@ -5,15 +5,11 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import br.com.database_copier.util.GenericUtils;
 import br.com.neoapp.base.BaseEntity;
@@ -30,9 +26,6 @@ public class Provider extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 521418863705706930L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	private String name;
@@ -43,7 +36,7 @@ public class Provider extends BaseEntity<String> {
 	private String tags;
 
 	@ManyToMany
-	@JoinTable(name = "provider_insurance", schema = GenericUtils.TARGET_SCHEMA)
+	@JoinTable(name = "providerInsurance", schema = GenericUtils.TARGET_SCHEMA)
 	private List<Insurance> insurances;
 
 	private String phone;
@@ -51,7 +44,7 @@ public class Provider extends BaseEntity<String> {
 	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String about;
 
-	@OneToOne(optional = false)
+	@OneToOne
 	private Address address;
 
 	private Double rating;
@@ -81,4 +74,7 @@ public class Provider extends BaseEntity<String> {
 
 	@Transient
 	private String deletedBy;
+	
+	@Transient
+	private String addressId;
 }

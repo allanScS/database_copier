@@ -4,12 +4,9 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Transient;
 
 import br.com.database_copier.util.GenericUtils;
 import br.com.neoapp.base.BaseEntity;
@@ -29,15 +26,13 @@ public class RefreshToken extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 7080662298149036308L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String refreshToken;
 
 	private Boolean expired;
+	
 	@OneToOne
 	private Account account;
 
@@ -56,4 +51,7 @@ public class RefreshToken extends BaseEntity<String> {
 	private LocalDateTime deletedAt;
 
 	private String deletedBy;
+	
+	@Transient
+	private String accountId;
 }

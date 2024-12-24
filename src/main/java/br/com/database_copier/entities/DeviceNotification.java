@@ -5,12 +5,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Transient;
 
 import br.com.database_copier.enums.DeviceNotificationStatus;
 import br.com.database_copier.enums.DeviceNotificationType;
@@ -25,16 +22,13 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
-@Table(name = "device_notification", schema = GenericUtils.TARGET_SCHEMA)
+@Table(name = "deviceNotification", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class DeviceNotification extends BaseEntity<String> {
 
 	private static final long serialVersionUID = -7333248746162363823L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	private String reference;
@@ -85,5 +79,8 @@ public class DeviceNotification extends BaseEntity<String> {
 	private String deletedBy;
 
 	private Long expiration;
+	
+	@Transient
+	private String accountId;
 
 }

@@ -40,7 +40,7 @@ public class Profile extends BaseEntity<String> {
 
 	@ElementCollection
 	@Enumerated(EnumType.STRING)
-	@JoinTable(name = "profiles_roles", joinColumns = 
+	@JoinTable(name = "profilesRoles", joinColumns = 
 	@JoinColumn(name = "profile_id"), schema = GenericUtils.TARGET_SCHEMA)
 	@Column(name = "role")
 	private List<Role> roles = new ArrayList<>();

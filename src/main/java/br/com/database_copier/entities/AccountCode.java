@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @DynamicUpdate
-@Table(name = "account_code", schema = GenericUtils.TARGET_SCHEMA)
+@Table(name = "accountCode", schema = GenericUtils.TARGET_SCHEMA)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
 public class AccountCode extends BaseEntity<String> {

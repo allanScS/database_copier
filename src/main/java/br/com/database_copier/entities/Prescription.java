@@ -4,13 +4,9 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import br.com.database_copier.util.GenericUtils;
 import br.com.neoapp.base.BaseEntity;
@@ -27,9 +23,6 @@ public class Prescription extends BaseEntity<String> {
 
 	private static final long serialVersionUID = 5554281342165155080L;
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	private String name;
@@ -62,4 +55,7 @@ public class Prescription extends BaseEntity<String> {
 
 	@Transient
 	private String deletedBy;
+	
+	@Transient
+	private String accountId;
 }
