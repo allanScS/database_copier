@@ -210,5 +210,6 @@ public class DatabaseCopierApplication {
 		final Duration duration = Duration.between(start, LocalDateTime.now());
 		System.out.printf("Duração total: %d horas, %d minutos, %d segundos\n", duration.toHours(),
 				duration.toMinutesPart(), duration.toSecondsPart());
+		System.out.println("TERMINOU A ETAPA " + args[0] + "/5");
 	}
 }
