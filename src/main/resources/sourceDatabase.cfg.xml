@@ -12,7 +12,7 @@
 		<property name="hibernate.connection.password">hdsfSDHFshdfLDFGosjf</property> -->
 
 		<property name="hibernate.connection.url">
-			jdbc:postgresql://carelink-eap-bkp.chny5nt9ynjq.sa-east-1.rds.amazonaws.com:5432/carelink_eap?statement_timeout=600000</property>
+			jdbc:postgresql://carelink-eap.chny5nt9ynjq.sa-east-1.rds.amazonaws.com:5432/carelink_eap?statement_timeout=600000</property>
 		<property name="hibernate.connection.username">postgres</property>
 		<property name="hibernate.connection.password">qiAJiToPHJsfWRIPRmuiTPgb</property>
 
