@@ -1,0 +1,23 @@
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">
+			org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.url">
+			jdbc:postgresql://linkdobanco/nomedobanco?statement_timeout=600000</property>
+		<property name="hibernate.connection.username">usuario</property>
+		<property name="hibernate.connection.password">senha</property>
+		<property name="connection_pool_size">15</property>
+		<property name="hibernate.jdbc.timeout">600</property>
+		<property name="hibernate.query.timeout">600</property> <!-- 600 segundos(10 minutos) -->
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+		<property name="hbm2ddl.auto">update</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">false</property>
+		<property name="hibernate.use_sql_comments">false</property>
+		<property name="hibernate.generate_statistics">false</property>
+	</session-factory>
+</hibernate-configuration>
