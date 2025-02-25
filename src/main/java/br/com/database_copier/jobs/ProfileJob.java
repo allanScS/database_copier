@@ -27,8 +27,7 @@ public class ProfileJob {
 		final String targetTable = "profile";
 
 		final String[] fields = { "id", "created_at", "created_by", "deleted", "deleted_at", "deleted_by",
-				"description", "name", "updated_at", "updated_by", "createdat", "createdby", "deletedat", "deletedby",
-				"updatedat", "updatedby" };
+				"description", "name", "updated_at", "updated_by" };
 
 		final BigInteger totalElements = (BigInteger) source
 				.createNativeQuery(

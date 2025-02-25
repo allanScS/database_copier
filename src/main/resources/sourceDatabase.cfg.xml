@@ -6,7 +6,7 @@
 			org.hibernate.dialect.PostgreSQLDialect</property>
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
 		<property name="hibernate.connection.url">
-			jdbc:postgresql://neoapp.c7ehgmwtdmov.us-east-1.rds.amazonaws.com:5432/neoapp?statement_timeout=600000</property>
+			jdbc:postgresql://central-saude-24h.cuspfwmoxeof.sa-east-1.rds.amazonaws.com:5432/central_saude_24h?statement_timeout=600000</property>
 		<property name="hibernate.connection.username">postgres</property>
 		<property name="hibernate.connection.password">T3l3ss4ud3</property>
 

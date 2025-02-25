@@ -28,8 +28,7 @@ public class AddressJob {
 
 		final String[] fields = { "id", "active", "city", "complement", "country", "created_at", "created_by",
 				"district", "latitude", "longitude", "number", "postal_code", "reference_point", "state", "street",
-				"updated_at", "updated_by", "createdat", "createdby", "postalcode", "referencepoint", "updatedat",
-				"updatedby" };
+				"updated_at", "updated_by" };
 
 		final BigInteger totalElements = (BigInteger) source
 				.createNativeQuery(

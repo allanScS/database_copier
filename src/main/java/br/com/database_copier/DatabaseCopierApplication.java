@@ -7,7 +7,6 @@ import org.hibernate.Session;
 
 import br.com.database_copier.jobs.AccountCodeJob;
 import br.com.database_copier.jobs.AccountJob;
-import br.com.database_copier.jobs.AddressJob;
 import br.com.database_copier.jobs.CallJob;
 import br.com.database_copier.jobs.CardJob;
 import br.com.database_copier.jobs.ChannelJob;
@@ -18,7 +17,6 @@ import br.com.database_copier.jobs.DeviceNotificationJob;
 import br.com.database_copier.jobs.EvaluationJob;
 import br.com.database_copier.jobs.HealthConditionJob;
 import br.com.database_copier.jobs.HospitalizationJob;
-import br.com.database_copier.jobs.InsuranceJob;
 import br.com.database_copier.jobs.InvitationJob;
 import br.com.database_copier.jobs.MassMessageJob;
 import br.com.database_copier.jobs.MedicalAppointmentJob;
@@ -28,7 +26,6 @@ import br.com.database_copier.jobs.NewsJob;
 import br.com.database_copier.jobs.NotificationJob;
 import br.com.database_copier.jobs.NotificationRelatedJob;
 import br.com.database_copier.jobs.PrescriptionJob;
-import br.com.database_copier.jobs.ProfileJob;
 import br.com.database_copier.jobs.ProviderJob;
 import br.com.database_copier.jobs.RefreshTokenJob;
 import br.com.database_copier.jobs.RelatedJob;
@@ -40,7 +37,7 @@ import br.com.database_copier.util.HibernateUtil;
 public class DatabaseCopierApplication {
 
 	public static void main(String[] args) {
-		int itensPerPage = 3000;
+		int itensPerPage = 50;
 		int poolLimit = 50;
 
 		final LocalDateTime start = LocalDateTime.now();
@@ -48,9 +45,9 @@ public class DatabaseCopierApplication {
 		Session source = HibernateUtil.startSessionFactorySourceDatabase().openSession();
 
 		final Runnable[] jobs = { 
-				() -> ProfileJob.execute(itensPerPage, poolLimit, source),
-				() -> AddressJob.execute(itensPerPage, poolLimit, source),
-				() -> InsuranceJob.execute(itensPerPage, poolLimit, source),
+//				() -> ProfileJob.execute(itensPerPage, poolLimit, source),
+//				() -> AddressJob.execute(itensPerPage, poolLimit, source),
+//				() -> InsuranceJob.execute(itensPerPage, poolLimit, source),
 				() -> ProviderJob.execute(itensPerPage, poolLimit, source),
 				() -> AccountJob.execute(itensPerPage, poolLimit, source),
 				() -> AccountCodeJob.execute(itensPerPage, poolLimit, source),

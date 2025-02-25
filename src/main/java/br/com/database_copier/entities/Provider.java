@@ -33,6 +33,7 @@ public class Provider extends BaseEntity<String> {
 	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String imageUrl;
 
+	@Column(columnDefinition = "VARCHAR(MAX)")
 	private String tags;
 
 	@ManyToMany
