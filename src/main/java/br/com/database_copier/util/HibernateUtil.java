@@ -32,7 +32,6 @@ import br.com.database_copier.entities.Notification;
 import br.com.database_copier.entities.Prescription;
 import br.com.database_copier.entities.Profile;
 import br.com.database_copier.entities.Provider;
-import br.com.database_copier.entities.ProviderInsurance;
 import br.com.database_copier.entities.RefreshToken;
 import br.com.database_copier.entities.Related;
 import br.com.database_copier.entities.Review;
@@ -87,7 +86,6 @@ public class HibernateUtil {
 			configuration.addAnnotatedClass(Review.class);
 			configuration.addAnnotatedClass(Schedule.class);
 			configuration.addAnnotatedClass(WorkShift.class);
-			configuration.addAnnotatedClass(ProviderInsurance.class);
 
 			configuration.setProperty("hibernate.c3p0.min_size", "5");
 			configuration.setProperty("hibernate.c3p0.max_size", "200"); // Defina o número máximo de conexões

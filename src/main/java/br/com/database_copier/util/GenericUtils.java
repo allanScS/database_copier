@@ -11,8 +11,8 @@ public class GenericUtils {
 
 	public static final String TARGET_SCHEMA = "dbo";
 
-	public static String buildSql(final String[] fields, final String table, final String schema,
-			final Integer itensPerPage, final Integer page) {
+	public static <T> String buildSql(final String[] fields, final String table, final String schema,
+			final Integer itensPerPage, final Integer page, final String sort) {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -36,6 +36,8 @@ public class GenericUtils {
 		sb.append(".");
 		sb.append(table);
 		sb.append(" AS entity");
+		sb.append(" ORDER BY ");
+		sb.append(sort);
 		sb.append(" LIMIT ");
 		sb.append(itensPerPage);
 		sb.append(" OFFSET ");

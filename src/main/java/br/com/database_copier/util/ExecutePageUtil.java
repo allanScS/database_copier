@@ -33,7 +33,7 @@ public class ExecutePageUtil {
 		ScrollableResults results = null;
 		T entity = null;
 
-		String query = GenericUtils.buildSql(fields, sourceTable, GenericUtils.SOURCE_SCHEMA, itensPerPage, page);
+		String query = GenericUtils.buildSql(fields, sourceTable, GenericUtils.SOURCE_SCHEMA, itensPerPage, page, "id");
 
 		while (!success) {
 			try {
@@ -101,7 +101,8 @@ public class ExecutePageUtil {
 		Transaction targetTransaction = null;
 		ScrollableResults results = null;
 
-		String query = GenericUtils.buildSql(sourceFields, sourceTable, GenericUtils.SOURCE_SCHEMA, itensPerPage, page);
+		String query = GenericUtils.buildSql(sourceFields, sourceTable, GenericUtils.SOURCE_SCHEMA, itensPerPage, page,
+				"notification_id");
 
 		while (!success) {
 			try {
@@ -119,8 +120,7 @@ public class ExecutePageUtil {
 
 					StringBuilder findQuery = new StringBuilder();
 
-					findQuery.append(
-							"SELECT TOP (1) [Notification_id], [related_id] FROM [CentralSaude24h].[dbo].[notificationRelated]");
+					findQuery.append("SELECT TOP (1) [Notification_id], [related_id] FROM [dbo].[notificationRelated]");
 					findQuery.append(" WHERE [Notification_id] = '");
 					findQuery.append(object[0].toString());
 					findQuery.append("' AND [related_id] = '");
@@ -842,43 +842,43 @@ public class ExecutePageUtil {
 				addressIdField = null;
 				addressId = null;
 
-//				Field idField = entityType.getDeclaredField("id");
-//				idField.setAccessible(true);
-//				String id = (String) idField.get(entity);
-//				Field field = entity.getClass().getDeclaredField("insurances");
-//				field.setAccessible(true);
-//
-//				List<Insurance> insurances = new ArrayList<>();
-//
-//				String query = "SELECT provider_id, insurances_id FROM " + GenericUtils.SOURCE_SCHEMA
-//						+ ".provider_insurance WHERE provider_id = '" + id + "'";
-//
-//				ScrollableResults results = source.createNativeQuery(query).setTimeout(600000)
-//						.scroll(ScrollMode.FORWARD_ONLY);
-//
-//				while (results.next()) {
-//
-//					Object[] obj = results.get();
-//
-//					if (obj[1] != null) {
-//						Insurance insurance = new Insurance();
-//						insurance.setId(obj[1].toString());
-//						insurances.add(insurance);
-//						insurance = null;
-//					}
-//
-//					obj = null;
-//				}
-//
-//				field.set(entity, insurances);
-//
-//				idField = null;
-//				id = null;
-//				field = null;
-//				insurances = null;
-//				query = null;
+				Field idField = entityType.getDeclaredField("id");
+				idField.setAccessible(true);
+				String id = (String) idField.get(entity);
+				Field field = entity.getClass().getDeclaredField("insurances");
+				field.setAccessible(true);
+
+				List<Insurance> insurances = new ArrayList<>();
+
+				String query = "SELECT provider_id, insurances_id FROM " + GenericUtils.SOURCE_SCHEMA
+						+ ".provider_insurance WHERE provider_id = '" + id + "'";
+
+				ScrollableResults results = source.createNativeQuery(query).setTimeout(600000)
+						.scroll(ScrollMode.FORWARD_ONLY);
+
+				while (results.next()) {
+
+					Object[] obj = results.get();
+
+					if (obj[1] != null) {
+						Insurance insurance = new Insurance();
+						insurance.setId(obj[1].toString());
+						insurances.add(insurance);
+						insurance = null;
+					}
+
+					obj = null;
+				}
+
+				field.set(entity, insurances);
+
+				idField = null;
+				id = null;
+				field = null;
+				insurances = null;
+				query = null;
 				source = null;
-//				results = null;
+				results = null;
 
 			}
 				break;
